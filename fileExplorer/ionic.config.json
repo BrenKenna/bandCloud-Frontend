@@ -1,0 +1,7 @@
+{
+  "name": "fileExplorer",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
