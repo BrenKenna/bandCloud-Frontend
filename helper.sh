@@ -1,26 +1,34 @@
-##################################
+#####################################################
+#####################################################
 # 
-# Any useful command line code
-#
-# Reference:
-#   https://www.itechinsiders.com/how-to-upload-document-using-file-chooser-in-ionic3-and-ionic4/
+# Supporting Code for app
 # 
-##################################
-
-
-###################
+# References:
+#  -
+#  -
 # 
-# Initial Setup
+#####################################################
+#####################################################
+
+
+#####################
 # 
-###################
+# Setup etc
+# 
+#####################
 
-# Install ionic & cordova
-npm i -g ionic cordova
+# Install angular
+npm install --save -g @angular/cli ngx-file-helpers @angular/cdk @angular/core @angular/material
 
 
-# Start blank project
-ionic start fileExplorer blank --type=angular
-cd fileExplorer
+# Initalize an app
+ng new file-explorer --routing --style=scss
+cd file-explorer
 
-ionic cordova plugin add cordova-plugin-filechooser com-badrit-base64
-npm i @ionic-native/file-chooser @ionic-native/base64
+
+# Create a new app component
+ng generate component component-name
+
+
+# Serve an app
+ng serve
