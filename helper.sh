@@ -39,5 +39,5 @@ ng generate componenet file-dropzone
 # Generate pipe?
 ng generate pipe read-mode-pipe
 
-# Serve an app
+# Serve an app: http://localhost:4200
 ng serve
