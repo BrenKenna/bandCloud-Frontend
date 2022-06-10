@@ -16,6 +16,9 @@ import { AppComponent } from './app.component';
 import { FilePickerComponent } from './file-picker/file-picker.component';
 import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
 import { ReadModePipe } from './read-mode-pipe.pipe';
+import { AccountManagerComponent } from './account-manager/account-manager.component';
+import { AccountDisplayerComponent } from './account-displayer/account-displayer.component';
+import { ProjectComponent } from './project/project.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { ReadModePipe } from './read-mode-pipe.pipe';
     FilePickerComponent,
     FileDropzoneComponent,
     ReadModePipe,
+    AccountManagerComponent,
+    AccountDisplayerComponent,
+    ProjectComponent,
   ],
   imports: [
     BrowserModule,
