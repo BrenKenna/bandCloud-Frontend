@@ -34,7 +34,8 @@ npm i '@angular/animations' '@angular/material' '@ng-web-apis/audio';
 ng generate component file-picker
 ng generate componenet file-dropzone
 
-# Generate pipe?
+# Generate pipe: Transform one value to another
+# kinda like how eunms can work with strategy pattern
 ng generate pipe read-mode-pipe
 
 # Generate service to manage audio & talk to backend api
