@@ -18,7 +18,7 @@ import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
 import { ReadModePipe } from './read-mode-pipe.pipe';
 import { AccountManagerComponent } from './account-manager/account-manager.component';
 import { AccountDisplayerComponent } from './account-displayer/account-displayer.component';
-import { ProjectComponent } from './project/project.component';
+import { ProjectsComponent } from './projects/projects.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,7 @@ import { ProjectComponent } from './project/project.component';
     ReadModePipe,
     AccountManagerComponent,
     AccountDisplayerComponent,
-    ProjectComponent,
+    ProjectsComponent,
   ],
   imports: [
     BrowserModule,
