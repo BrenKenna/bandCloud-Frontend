@@ -29,7 +29,8 @@ cd file-explorer
 
 
 # Install dependancies
-npm i '@angular/animations' '@angular/material'
+# import {AUDIO_CONTEXT} from '@ng-web-apis/audio';
+npm i '@angular/animations' '@angular/material' '@ng-web-apis/audio';
 
 
 # Create a new app component
@@ -41,7 +42,8 @@ ng generate pipe read-mode-pipe
 
 
 # Generate service to manage audio & talk to backend api
-ng generate service services/backend/bandCloud-rest
+ng generate service services/backend/bandCloud-rest-account
+ng generate service services/backend/bandCloud-rest-project
 ng generate service services/audio/bandCloud-audio
 
 
