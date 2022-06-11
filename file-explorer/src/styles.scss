@@ -1,6 +1,19 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 body {
   margin: 0;
   padding: 0;
+}
+
+
+/* Registration radio buttons */
+.register-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.register-radio-btn {
+  margin: 5px;
 }

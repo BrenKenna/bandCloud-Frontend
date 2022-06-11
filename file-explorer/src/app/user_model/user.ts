@@ -99,6 +99,7 @@ export class User {
     public validate() {
 
         // Check lengths
+        console.dir(this, {depth:null});
         if ( this.username.length < 6 || this.password.length < 8 ) {
             this.validation.values.push( UserValidation.LENGTHS );
 			this.validation.state = false;

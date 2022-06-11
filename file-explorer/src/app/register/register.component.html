@@ -1,1 +1,60 @@
-<p>register works!</p>
+﻿<mat-card>
+    <mat-card-title>Registration</mat-card-title>
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+            <mat-form-field appearance="standard">
+                <mat-label>Username</mat-label>
+                <input matInput maxlength="20" inputmode="tel" placeholder="Please Enter Username" formControlName="username" #username>
+                <mat-hint>Mini character 20: {{ username.value.length }}/20</mat-hint>
+                <mat-error>Username is required</mat-error>
+                <mat-error *ngIf="submitted && getFormFields['username'].errors">
+                    <div *ngIf="getFormFields['username'].errors['required']">Username is required</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-divider></mat-divider>
+            <p>
+                <mat-form-field appearance="standard">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput maxlength="35" inputmode="tel" placeholder="Please Enter Email Address" formControlName="email" #email>
+                    <mat-hint>Allowed character 35: {{ email.value.length }}/35</mat-hint>
+                    <mat-error>Email is required</mat-error>
+                    <mat-error *ngIf="submitted && getFormFields['email'].errors">
+                        <div *ngIf="getFormFields['email'].errors['required']">Email is required</div>
+                    </mat-error>
+                </mat-form-field>
+            </p>
+            <mat-divider></mat-divider>
+            <p>
+                <mat-form-field appearance="standard">
+                    <mat-label>Password</mat-label>
+                    <input type="password" matInput maxlength="20" inputmode="tel" placeholder="Please Enter Password" formControlName="password" #password>
+                    <mat-hint>Mini character 20: {{ password.value.length }}/20</mat-hint>
+                    <mat-error>Password is required</mat-error>
+                    <mat-error *ngIf="submitted && getFormFields['password'].errors">
+                        <div *ngIf="getFormFields['password'].errors['required']">Password is required</div>
+                    </mat-error>
+                </mat-form-field>
+            </p>
+            <mat-divider></mat-divider>
+            <p>
+                <br>
+                <label id="register-radio">Please Select an Account Type:</label>
+                <mat-radio-group
+                    aria-labelledby="register-radio"
+                    class="register-radio-group"
+                    formControlName="accountType"
+                >
+                    <mat-radio-button
+                        class="register-radio-btn"
+                        *ngFor="let type of accountTypes"
+                        [value]="type.name"
+                    >
+                        {{ type.name }}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </p>
+            <button [disabled]="loading" mat-raised-button color="primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Register
+            </button>
+        </form>
+</mat-card>

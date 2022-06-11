@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 
 import { User } from '../user_model/user';
 import { UserValidation } from '../user_model/user-validation';
@@ -20,11 +23,16 @@ export class RegisterComponent implements OnInit {
 
   // Attributes
   private user: User;
-  private form: FormGroup;
+  form: FormGroup;
   private validation: {} = {};
   private registerResponse: Observable<any>;
-  private loading = false;
-  private submitted = false;
+  loading = false;
+  submitted = false;
+  accountTypes: Array<any> = [
+    { name: AccountTypes.SILVER, value: "Silver" },
+    { name: AccountTypes.GOLD, value: "Gold" },
+    { name: AccountTypes.PLATINUM, value: "Platnium" }
+  ];
 
   /**
    * 
@@ -39,10 +47,10 @@ export class RegisterComponent implements OnInit {
    */
   ngOnInit() {
     this.form = this.formBuilder.group({
-      username: ['', Validators.required, Validators.minLength(6)],
-      email: ['', [Validators.required, Validators.minLength(6)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      accountType: [ AccountTypes, [Validators.required]]
+      username: ['', [ Validators.required, Validators.minLength(6) ] ],
+      email: ['', [ Validators.required, Validators.minLength(6) ] ],
+      password: ['', [ Validators.required, Validators.minLength(6) ] ],
+      accountType: [ this.accountTypes, [ Validators.required] ]
     });
   }
 
@@ -52,7 +60,7 @@ export class RegisterComponent implements OnInit {
    * 
    * @returns 
    */
-  public getFormFields() {
+  get getFormFields() {
     return this.form.controls;
   }
 
@@ -65,10 +73,10 @@ export class RegisterComponent implements OnInit {
     // Set user property & sanity check
     this.user = new User(
       { 
-        username: this.form.get("username"), 
-        email: this.form.get("email"), 
-        password: this.form.get("password"),
-        accountType: this.form.get("AccountType"),
+        username: this.form.controls['username'].value, 
+        email: this.form.controls['email'].value, 
+        password: this.form.controls['password'].value,
+        accountType: this.form.controls['accountType'].value
       }
     );
     console.dir(this.user.toString(), {depth: null});
@@ -83,7 +91,6 @@ export class RegisterComponent implements OnInit {
 
   /**
    * 
-   * @returns 
    */
   public submitForm() {
 
@@ -99,11 +106,14 @@ export class RegisterComponent implements OnInit {
     }
 
     // Post user
+    this.submitted, this.loading = true;
     this.registerResponse = this.accountServ.register(this.user.getUsername(), this.user.getEmail(), this.user.getPassword());
     this.registerResponse.subscribe(
       data => {
         console.dir(data, {depth: null});
+        return UserValidation.VALID;
       },
     );
+    return UserValidation.INVALID_FORM;
   }
 }
