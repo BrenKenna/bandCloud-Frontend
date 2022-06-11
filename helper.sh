@@ -49,5 +49,12 @@ ng generate component account-displayer
 ng generate component projects
 
 
+# Create user model, register & login components
+ng generate component register
+ng generate component login
+ng generate class user_model/user
+ng generate enum user_model/user_validation
+
+
 # Serve an app: http://localhost:4200
 ng serve

@@ -19,6 +19,8 @@ import { ReadModePipe } from './read-mode-pipe.pipe';
 import { AccountManagerComponent } from './account-manager/account-manager.component';
 import { AccountDisplayerComponent } from './account-displayer/account-displayer.component';
 import { ProjectsComponent } from './projects/projects.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { ProjectsComponent } from './projects/projects.component';
     AccountManagerComponent,
     AccountDisplayerComponent,
     ProjectsComponent,
+    RegisterComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
