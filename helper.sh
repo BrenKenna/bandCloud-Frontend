@@ -27,8 +27,10 @@ ng new file-explorer --routing --style=scss
 cd file-explorer
 
 # Install dependancies
+# import { ReactiveFormsModule } from '@angular/forms';
 # import {AUDIO_CONTEXT} from '@ng-web-apis/audio';
 npm i '@angular/animations' '@angular/material' '@ng-web-apis/audio';
+npm i '@angular/forms'
 
 # Create a new app component
 ng generate component file-picker
@@ -54,7 +56,7 @@ ng generate component register
 ng generate component login
 ng generate class user_model/user
 ng generate enum user_model/user_validation
-
+ng generate enum user_model/accountTypes
 
 # Serve an app: http://localhost:4200
 ng serve

@@ -7,10 +7,10 @@ import { UserValidation } from './user-validation';
  * Interface to support overloading constructor
  */
 interface UserInterface {    
-    username: string;
-    password: string;
-    email: string;
-    accountType: string;
+    username: any;
+    password: any;
+    email: any;
+    accountType: any;
 }
 
 /**
@@ -33,22 +33,22 @@ export class User {
 
 
     /**
-     * Constructor from registration view
-     * @param obj 
+     * Constructor from login view
+     * @param loginView 
      */
-    constructor(registrationView: UserInterface);
+    constructor(loginView: UserInterface);
 
 
     /**
-     * Constructor from login view
+     * Constructor from registration view
      * 
-     * @param loginView 
+     * @param registrationView 
      */
-    constructor(loginView?: UserInterface) {
-        this.username = loginView?.username ?? "";
-        this.password = loginView?.password ?? "";
-        this.email = loginView?.email ?? "";
-        this.accountType = loginView?.accountType ?? "";
+    constructor(registrationView?: UserInterface) {
+        this.username = registrationView?.username ?? "";
+        this.password = registrationView?.password ?? "";
+        this.email = registrationView?.email ?? "";
+        this.accountType = registrationView?.accountType ?? "";
     }
 
     /**
@@ -96,7 +96,7 @@ export class User {
      * 
      * @returns 
      */
-    public isValid() {
+    public validate() {
 
         // Check lengths
         if ( this.username.length < 6 || this.password.length < 8 ) {
@@ -134,5 +134,18 @@ export class User {
 
         // Return validation map
         return this.validation;
+    }
+
+
+    /**
+     * Represent object as string
+     */
+    public toString() {
+        let output = `User(
+            "username" = ${this.username},
+            "email" = ${this.email},
+            "password" = ${this.password},
+            "accountType" = ${this.accountType}
+            )`;
     }
 }
