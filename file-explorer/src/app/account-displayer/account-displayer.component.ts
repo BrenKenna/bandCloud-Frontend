@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { BandCloudRestAccountService } from '../services/backend/band-cloud-rest-account.service';
+import { UserDisplay } from '../user_model/user-display/user-display';
 
 @Component({
   selector: 'app-account-displayer',
@@ -7,9 +11,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountDisplayerComponent implements OnInit {
 
-  constructor() { }
+  user: any;
 
-  ngOnInit(): void {
+  constructor(private accountServ: BandCloudRestAccountService) {}
+
+  ngOnInit() {
+    this.accountServ.view().subscribe(
+      data => {
+        this.user = data;
+    });
   }
 
 }

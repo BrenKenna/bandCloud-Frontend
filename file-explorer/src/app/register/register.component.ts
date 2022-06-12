@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
 
 import { User } from '../user_model/user';
@@ -79,7 +77,7 @@ export class RegisterComponent implements OnInit {
         accountType: this.form.controls['accountType'].value
       }
     );
-    console.dir(this.user.toString(), {depth: null});
+    console.log(this.user.toString());
 
 
     // Validate input
@@ -107,13 +105,19 @@ export class RegisterComponent implements OnInit {
 
     // Post user
     this.submitted, this.loading = true;
-    this.registerResponse = this.accountServ.register(this.user.getUsername(), this.user.getEmail(), this.user.getPassword());
+    this.registerResponse = this.accountServ.register(
+      this.user.getUsername(),
+      this.user.getEmail(),
+      this.user.getPassword(),
+      this.user.getAccountType()
+    );
     this.registerResponse.subscribe(
       data => {
         console.dir(data, {depth: null});
         return UserValidation.VALID;
-      },
+      }
     );
+    this.loading, this.submitted = false;
     return UserValidation.INVALID_FORM;
   }
 }

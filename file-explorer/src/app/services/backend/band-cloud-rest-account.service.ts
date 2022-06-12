@@ -16,16 +16,16 @@ export class BandCloudRestAccountService {
   };
 
   // Attribute to hold endpoints etc
-  private _rootPath = "http://localhost:8080";
+  private _rootPath = "http://localhost:4200";
   private _paths = {
     "account": {
 
       "manager": {
         "Requests": ["POST"],
-        "root" : this._rootPath + "/account/manager",
-        "register": this._rootPath + "/account/manager/register",
-        "login": this._rootPath + "/account/manager/login",
-        "degregister": this._rootPath + "/account/manager/deregister"
+        "root" : this._rootPath + "/account/manage",
+        "register": this._rootPath + "/account/manage/register",
+        "login": this._rootPath + "/account/manage/login",
+        "degregister": this._rootPath + "/account/manage/deregister"
       },
 
       "display": {
@@ -58,11 +58,12 @@ export class BandCloudRestAccountService {
    * @param email 
    * @param password 
    */
-  public register(username: String, email: String, password: String) {
+  public register(username: String, email: String, password: String, accountHolder: String) {
     let msg = JSON.stringify({
       "username": username,
       "email": email,
-      "password": password
+      "password": password,
+      "accountHolder": accountHolder
     });
     return this.http.post(this._paths.account.manager.register, msg, {"headers": this._requestHeaders});
   }

@@ -1,1 +1,37 @@
-<p>account-displayer works!</p>
+<mat-card>
+    <mat-card-title>UserID</mat-card-title>
+    <mat-card-subtitle>{{ user?.userID }}</mat-card-subtitle>
+</mat-card>
+
+<br>
+<mat-divider></mat-divider>
+
+<mat-card>
+    <mat-card-title>Username</mat-card-title>
+    <mat-card-subtitle>{{ user?.username }}</mat-card-subtitle>
+    <mat-card-actions>
+      <button mat-raised-button color="primary">Change me</button>
+    </mat-card-actions>
+</mat-card>
+
+<br>
+<mat-divider></mat-divider>
+
+<mat-card>
+    <mat-card-title>Email</mat-card-title>
+    <mat-card-subtitle>{{ user?.email }}</mat-card-subtitle>
+    <mat-card-actions>
+      <button mat-raised-button color="primary">Change me</button>
+    </mat-card-actions>
+</mat-card>
+
+<br>
+<mat-divider></mat-divider>
+
+<mat-card>
+    <mat-card-title>Account Type</mat-card-title>
+    <mat-card-subtitle>{{ user?.accountType }}</mat-card-subtitle>
+    <mat-card-actions>
+      <button mat-raised-button color="primary">Change me</button>
+    </mat-card-actions>
+</mat-card>

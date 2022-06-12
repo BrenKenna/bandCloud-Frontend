@@ -57,6 +57,8 @@ ng generate component login
 ng generate class user_model/user
 ng generate enum user_model/user_validation
 ng generate enum user_model/accountTypes
+ng generate class user_model/user-display/user-display
+ng generate class user_model/user-display/user-display-update
 
 # Serve an app: http://localhost:4200
 ng serve
