@@ -20,6 +20,11 @@ const routes: Routes = [
   {
     'path': 'account-display',
     loadChildren: () => import('./account-displayer/account-displayer.module').then(m => m.AccountDisplayerModule)
+  },
+
+  {
+    'path': 'account-login',
+    loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
   }
 ];
 

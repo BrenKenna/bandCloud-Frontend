@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
   /**
    * Create user via registration view
    */
-  public createUser() {
+  private createUser() {
 
     // Set user property & sanity check
     this.user = new User(
