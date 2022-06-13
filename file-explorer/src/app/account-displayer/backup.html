@@ -1,0 +1,49 @@
+<mat-card>
+    <mat-card-title>UserID</mat-card-title>
+    <mat-card-subtitle>{{ user?.userID }}</mat-card-subtitle>
+</mat-card>
+
+<br>
+<mat-divider></mat-divider>
+
+<mat-card>
+    <mat-card-title>Username</mat-card-title>
+    <mat-card-subtitle>{{ user?.username }}</mat-card-subtitle>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="edit('uname')" >Change me</button>
+    </mat-card-actions>
+    <mat-form-field id="unameDiv" appearance="fill">
+      <mat-label for="uname">Username</mat-label>
+      <input matInput type="text" id="uname" placeholder="Enter Username" name="uname" required>
+    </mat-form-field>
+</mat-card>
+
+<br>
+<mat-divider></mat-divider>
+
+<mat-card>
+    <mat-card-title>Email</mat-card-title>
+    <mat-card-subtitle>{{ user?.email }}</mat-card-subtitle>
+    <mat-card-actions>
+      <button mat-raised-button color="primary">Change me</button>
+    </mat-card-actions>
+</mat-card>
+
+<br>
+<mat-divider></mat-divider>
+
+<mat-card>
+    <mat-card-title>Account Type</mat-card-title>
+    <mat-card-subtitle>{{ user?.accountType }}</mat-card-subtitle>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" >Change me</button>
+    </mat-card-actions>
+</mat-card>
+
+<br>
+<mat-divider></mat-divider>
+<div class="displayBtns">
+  <button class="btnRow" mat-raised-button color="basic" (click)="fetch()">Fetch/Refresh</button>
+  <button class="btnRow" mat-raised-button color="accent">Update</button>
+  <button class="btnRow" mat-raised-button color="warn">Close Account</button>
+</div>

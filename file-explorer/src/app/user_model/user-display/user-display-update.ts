@@ -2,36 +2,33 @@
 /**
  * Class to represent user display 
  */
+
+interface UserDisplayInterface {
+    username: any;
+    email: any;
+    password: any;
+}
+
 export class UserDisplayUpdate {
 
-    private userID: string;
+    // Attributes
     private username: string;
     private email: string;
-    private accountType: string;
+    private password: string;
+    // private accountType: string;
 
+    
     /**
      * 
-     * @param userID 
      * @param username 
      * @param email 
      * @param accountType 
      */
-    constructor(userID: string, username: string, email: string, accountType: string) {
-        this.userID = userID;
-        this.username = username;
-        this.email = email;
-        this.accountType = accountType;
+    constructor(userUpdates: UserDisplayInterface) {
+        this.username = userUpdates?.username ?? "";
+        this.email = userUpdates?.email ?? "";
+        this.password = userUpdates?.password ?? "";
     }
-
-
-    /**
-     * 
-     * @returns 
-     */
-    public getUserID() {
-        return this.userID;
-    }
-
 
     /**
      * 
@@ -55,7 +52,43 @@ export class UserDisplayUpdate {
      * 
      * @returns 
      */
+     public getPassword() {
+        return this.password;
+    }
+
+
+    /**
+     * 
+     * @returns 
+     */
     public getAccountType() {
-        return this.accountType;
+        return "";
+    }
+
+
+    /**
+     * 
+     * @returns 
+     */
+    public updateFor_Name() {
+        return this.username !== '';
+    }
+
+
+    /**
+     * 
+     * @returns 
+     */
+     public updateFor_Email() {
+        return this.email !== '';
+    }
+
+
+    /**
+     * 
+     * @returns 
+     */
+     public updateFor_Pass() {
+        return this.password !== '';
     }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { UserDisplay } from 'src/app/user_model/user-display/user-display';
+import { UserDisplayUpdate } from 'src/app/user_model/user-display/user-display-update';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class BandCloudRestAccountService {
         "update": {
           "Requests": ["POST"],
           "paramTypes": [ "boolean" ],
-          "params": [ "updateName", "updateEmail", "updatePass"  ],
+          "params": [ "updateName", "updateEmail", "updateAuth" ],
           "path": this._rootPath + "/account/display/update"
         }
       }
@@ -112,7 +113,36 @@ export class BandCloudRestAccountService {
    */
    public view() {
     console.log("A get UserDisplay request has being sent");
-    // return this.http.get<UserDisplay>(this._paths.account.display.view);
     return this.http.get<UserDisplay>(this._paths.account.display.view)
+  }
+
+
+  /**
+   * Post user account updates
+   * 
+   * @param userData 
+   * @param name 
+   * @param email 
+   * @param pass 
+   * @returns 
+   */
+  public update(userData: UserDisplayUpdate, name: boolean, email: boolean, pass: boolean) {
+
+    // Manage request data
+    let msg = JSON.stringify(userData);
+    let uri = `${this._paths.account.display.update.path}?updateName=${name}&updateEmail=${email}&updateAuth=${pass}`;
+
+    // Santy check request data
+    console.log(`
+      	Sending Message: ${msg},\n
+        To URI: ${uri}
+    `);
+
+    // Send request
+    return this.http.post(
+      uri,
+      msg,
+      {"headers": this._requestHeaders}
+      );
   }
 }

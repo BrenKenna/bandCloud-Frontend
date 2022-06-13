@@ -1,48 +1,95 @@
-<mat-card>
-    <mat-card-title>UserID</mat-card-title>
-    <mat-card-subtitle>{{ user?.userID }}</mat-card-subtitle>
-    <!--
-      <mat-card-subtitle [innerHTML]="getUserDisplay()"></mat-card-subtitle>
-    -->
-</mat-card>
+<mat-accordion [formGroup]="updates">
 
-<br>
-<mat-divider></mat-divider>
+  <!-- UserID -->
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>UserID</mat-panel-title>
+      <mat-panel-description>Display your UserID</mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>Current: {{ user?.userID }}</p>
+  </mat-expansion-panel>
 
-<mat-card>
-    <mat-card-title>Username</mat-card-title>
-    <mat-card-subtitle>{{ user?.username }}</mat-card-subtitle>
-    <mat-card-actions>
-      <button mat-raised-button color="primary">Change me</button>
-    </mat-card-actions>
-</mat-card>
 
-<br>
-<mat-divider></mat-divider>
+  <!-- Username -->
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Username</mat-panel-title>
+      <mat-panel-description>Change your Username</mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input id="uname" formControlName="username" type="text" matInput placeholder="New Username">
+    </mat-form-field>
+    <p id="currentUname">Current: {{ user?.username }}</p>
+  </mat-expansion-panel>
 
-<mat-card>
-    <mat-card-title>Email</mat-card-title>
-    <mat-card-subtitle>{{ user?.email }}</mat-card-subtitle>
-    <mat-card-actions>
-      <button mat-raised-button color="primary">Change me</button>
-    </mat-card-actions>
-</mat-card>
+  <!-- Email -->
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Email</mat-panel-title>
+      <mat-panel-description>Change Email Address</mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input id="email" formControlName="email" type="email" matInput placeholder="New Email Address">
+    </mat-form-field>
+    <p id="currentEmail">Current: {{ user?.email }}</p>
+  </mat-expansion-panel>
 
-<br>
-<mat-divider></mat-divider>
 
-<mat-card>
-    <mat-card-title>Account Type</mat-card-title>
-    <mat-card-subtitle>{{ user?.accountType }}</mat-card-subtitle>
-    <mat-card-actions>
-      <button mat-raised-button color="primary">Change me</button>
-    </mat-card-actions>
-</mat-card>
+  <!-- Password -->
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Password</mat-panel-title>
+      <mat-panel-description>Change Password</mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- New Password -->
+    <mat-form-field appearance="fill">
+      <mat-label>New Password</mat-label>
+      <input id="newPass" formControlName="newPass" type="password" matInput placeholder="New Password">
+    </mat-form-field>
+    <mat-divider></mat-divider><br>
+
+    <!-- Old Password -->
+    <mat-form-field appearance="fill">
+      <mat-label>Old Password</mat-label>
+      <input id="oldPass" formControlName="oldPass" type="password" matInput placeholder="Old Password">
+    </mat-form-field>
+  </mat-expansion-panel>
+
+
+  <!-- Account Type -->
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Account Type</mat-panel-title>
+      <mat-panel-description>Change your Account Type</mat-panel-description>
+    </mat-expansion-panel-header>
+    <div>
+      <label id="register-radio">Please Select an Account Type:</label>
+      <mat-radio-group
+        aria-labelledby="register-radio"
+        class="register-radio-group"
+        formControlName="accountType"
+        >
+        <mat-radio-button
+          class="register-radio-btn"
+          *ngFor="let type of accountTypes"
+          [value]="type.name"
+        >
+          {{ type.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+      <mat-divider></mat-divider><br>
+      <p id="accountType">Current: {{ user?.accountType }}</p>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
 
 <br>
 <mat-divider></mat-divider>
 <div class="displayBtns">
   <button class="btnRow" mat-raised-button color="basic" (click)="fetch()">Fetch/Refresh</button>
-  <button class="btnRow" mat-raised-button color="accent">Update</button>
+  <button class="btnRow" mat-raised-button color="accent" (click)="sendUpdates()">Update</button>
   <button class="btnRow" mat-raised-button color="warn">Close Account</button>
 </div>
