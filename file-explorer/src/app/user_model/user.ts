@@ -7,7 +7,6 @@ import { UserValidation } from './user-validation';
  * Interface to support overloading constructor
  */
 interface UserInterface {  
-    userID: any;  
     username: any;
     password: any;
     email: any;
@@ -20,7 +19,6 @@ interface UserInterface {
 export class User {
     
     // Attributes
-    private userID: string;
     private username: string;
     private password: string;
     private email: string;
@@ -47,22 +45,13 @@ export class User {
      * @param registrationView 
      */
     constructor(registrationView?: UserInterface) {
-        this.userID = registrationView?.userID ?? "";
+        console.log("A User has being created");
         this.username = registrationView?.username ?? "";
         this.password = registrationView?.password ?? "";
         this.email = registrationView?.email ?? "";
         this.accountType = registrationView?.accountType ?? "";
     }
 
-
-    /**
-     * Get userID
-     * 
-     * @returns 
-     */
-     public getUserID() {
-        return this.userID;
-    }
 
     /**
      * Get username

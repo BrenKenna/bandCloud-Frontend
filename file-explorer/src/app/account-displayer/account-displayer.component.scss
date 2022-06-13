@@ -1,0 +1,13 @@
+/*
+    Stylings for the account-display component
+*/
+
+.displayBtns {
+    display: table;
+}
+
+#btnRow {
+    display: table-cell;
+    margin-left: 10px;
+    margin-top: 10px;
+}

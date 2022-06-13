@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 
 import { BandCloudRestAccountService } from '../services/backend/band-cloud-rest-account.service';
 import { UserDisplay } from '../user_model/user-display/user-display';
@@ -12,50 +11,29 @@ import { UserDisplay } from '../user_model/user-display/user-display';
 export class AccountDisplayerComponent implements OnInit {
 
   user: UserDisplay;
-  // user: any;
 
-  constructor(private accountServ: BandCloudRestAccountService) {}
+  constructor(private accountServ: BandCloudRestAccountService) {};
+  ngOnInit() {};
 
-
+  /*
   ngOnInit() {
     this.accountServ.view().subscribe(
       data => {
         this.user = data;
     });
   }
-
-  /**
-   * 
-   * @returns 
-   */
-  public getUserID() {
-    return this.user.getUserID();
-  }
+  */
 
 
   /**
+   * Fetch user display data
    * 
-   * @returns 
    */
-   public getUserName() {
-    return this.user.getUserName();
-  }
-
-
-  /**
-   * 
-   * @returns 
-   */
-   public getEmail() {
-    return this.user.getEmail();
-  }
-
-
-  /**
-   * 
-   * @returns 
-   */
-  public getAccountType() {
-    return this.user.getAccountType();
+  public fetch() {
+    this.accountServ.view().subscribe(
+      data => {
+        this.user = data;
+        console.dir(this.user, {depth: null});
+    });
   }
 }

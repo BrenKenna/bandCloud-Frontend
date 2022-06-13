@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-
 import { User } from '../user_model/user';
 import { UserValidation } from '../user_model/user-validation';
 import { AccountTypes } from '../user_model/account-types';
@@ -71,7 +70,6 @@ export class RegisterComponent implements OnInit {
     // Set user property & sanity check
     this.user = new User(
       { 
-        userID: "",
         username: this.form.controls['username'].value, 
         email: this.form.controls['email'].value, 
         password: this.form.controls['password'].value,

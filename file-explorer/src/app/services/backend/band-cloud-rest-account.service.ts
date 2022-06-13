@@ -60,6 +60,7 @@ export class BandCloudRestAccountService {
    * @param password 
    */
   public register(username: String, email: String, password: String, accountHolder: String) {
+    console.log("A Registration request has being sent");
     let msg = JSON.stringify({
       "username": username,
       "email": email,
@@ -78,6 +79,7 @@ export class BandCloudRestAccountService {
    * @param password 
    */
    public login(username: String, email: String, password: String) {
+    console.log("A Login request has being sent");
     let msg = JSON.stringify({
       "username": username,
       "email": email,
@@ -95,6 +97,7 @@ export class BandCloudRestAccountService {
    * @param password 
    */
    public deregister(username: String, email: String, password: String) {
+    console.log("A Deregistration post request has being sent");
     let msg = JSON.stringify({
       "username": username,
       "email": email,
@@ -108,6 +111,7 @@ export class BandCloudRestAccountService {
    * 
    */
    public view() {
+    console.log("A get UserDisplay request has being sent");
     // return this.http.get<UserDisplay>(this._paths.account.display.view);
     return this.http.get<UserDisplay>(this._paths.account.display.view)
   }

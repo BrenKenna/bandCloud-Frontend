@@ -17,6 +17,7 @@ export class UserDisplay {
      * @param accountType 
      */
     constructor(userID: string, username: string, email: string, accountType: string) {
+        console.log("A User has being created");
         this.userID = userID;
         this.username = username;
         this.email = email;
