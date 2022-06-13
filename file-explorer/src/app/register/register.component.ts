@@ -71,6 +71,7 @@ export class RegisterComponent implements OnInit {
     // Set user property & sanity check
     this.user = new User(
       { 
+        userID: "",
         username: this.form.controls['username'].value, 
         email: this.form.controls['email'].value, 
         password: this.form.controls['password'].value,

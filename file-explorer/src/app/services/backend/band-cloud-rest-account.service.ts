@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { User } from 'src/app/user_model/user';
 
 @Injectable({
   providedIn: 'root'
@@ -107,6 +108,6 @@ export class BandCloudRestAccountService {
    * 
    */
    public view() {
-    return this.http.get(this._paths.account.display.view);
+    return this.http.get<User>(this._paths.account.display.view);
   }
 }

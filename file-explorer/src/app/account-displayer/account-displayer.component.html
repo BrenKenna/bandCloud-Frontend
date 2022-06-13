@@ -1,6 +1,9 @@
 <mat-card>
     <mat-card-title>UserID</mat-card-title>
-    <mat-card-subtitle>{{ user?.userID }}</mat-card-subtitle>
+    <mat-card-subtitle>{{ getuserID() }}</mat-card-subtitle>
+    <!--
+      <mat-card-subtitle [innerHTML]="getUserDisplay()"></mat-card-subtitle>
+    -->
 </mat-card>
 
 <br>
@@ -8,7 +11,7 @@
 
 <mat-card>
     <mat-card-title>Username</mat-card-title>
-    <mat-card-subtitle>{{ user?.username }}</mat-card-subtitle>
+    <mat-card-subtitle>{{ getUserName() }}</mat-card-subtitle>
     <mat-card-actions>
       <button mat-raised-button color="primary">Change me</button>
     </mat-card-actions>
@@ -19,7 +22,7 @@
 
 <mat-card>
     <mat-card-title>Email</mat-card-title>
-    <mat-card-subtitle>{{ user?.email }}</mat-card-subtitle>
+    <mat-card-subtitle>{{ getEmail() }}</mat-card-subtitle>
     <mat-card-actions>
       <button mat-raised-button color="primary">Change me</button>
     </mat-card-actions>
@@ -30,7 +33,7 @@
 
 <mat-card>
     <mat-card-title>Account Type</mat-card-title>
-    <mat-card-subtitle>{{ user?.accountType }}</mat-card-subtitle>
+    <mat-card-subtitle>{{ getAccountType() }}</mat-card-subtitle>
     <mat-card-actions>
       <button mat-raised-button color="primary">Change me</button>
     </mat-card-actions>

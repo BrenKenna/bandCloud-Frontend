@@ -11,15 +11,44 @@ import { UserDisplay } from '../user_model/user-display/user-display';
 })
 export class AccountDisplayerComponent implements OnInit {
 
-  user: any;
+  user: UserDisplay;
 
   constructor(private accountServ: BandCloudRestAccountService) {}
 
   ngOnInit() {
     this.accountServ.view().subscribe(
       data => {
-        this.user = data;
+        this.user = new UserDisplay(data.getUserID(), data.getUsername(), data.getEmail(), data.getAccountType());
     });
   }
 
+  /**
+   * 
+   * @returns 
+   */
+  public getUserID() {
+    return this.user.getUserID();
+  }
+
+
+  /**
+   * 
+   * @returns 
+   */
+   public getUserName() {
+    return this.user.getUserName();
+  }
+
+
+  /**
+   * 
+   * @returns 
+   */
+   public getEmail() {
+    return this.user.getEmail();
+  }
+
+  public getAccountType() {
+    return this.user.getAccountType();
+  }
 }
