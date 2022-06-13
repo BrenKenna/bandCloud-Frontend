@@ -12,13 +12,15 @@ import { UserDisplay } from '../user_model/user-display/user-display';
 export class AccountDisplayerComponent implements OnInit {
 
   user: UserDisplay;
+  // user: any;
 
   constructor(private accountServ: BandCloudRestAccountService) {}
+
 
   ngOnInit() {
     this.accountServ.view().subscribe(
       data => {
-        this.user = new UserDisplay(data.getUserID(), data.getUsername(), data.getEmail(), data.getAccountType());
+        this.user = data;
     });
   }
 
@@ -48,6 +50,11 @@ export class AccountDisplayerComponent implements OnInit {
     return this.user.getEmail();
   }
 
+
+  /**
+   * 
+   * @returns 
+   */
   public getAccountType() {
     return this.user.getAccountType();
   }

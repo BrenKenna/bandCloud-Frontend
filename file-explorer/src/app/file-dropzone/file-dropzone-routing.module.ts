@@ -5,7 +5,7 @@ import { FileDropzoneComponent } from './file-dropzone.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'dropzone',
     component: FileDropzoneComponent
   }
 ];

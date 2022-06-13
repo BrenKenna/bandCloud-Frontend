@@ -5,7 +5,7 @@ import { FilePickerComponent } from './file-picker.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'picker',
     component: FilePickerComponent
   }
 ];

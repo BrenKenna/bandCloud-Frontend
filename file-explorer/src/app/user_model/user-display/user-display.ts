@@ -4,10 +4,10 @@
 export class UserDisplay {
 
     // Attributes
-    private userID: string
-    private username: string;
-    private email: string;
-    private accountType: string;
+    userID: string
+    username: string;
+    email: string;
+    accountType: string;
     
     /**
      * Construct user display from main data
