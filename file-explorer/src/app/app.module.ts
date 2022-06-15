@@ -29,6 +29,8 @@ import { AccountDisplayerComponent } from './account-displayer/account-displayer
 import { ProjectsComponent } from './projects/projects.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { ProjectsViewerComponent } from './projects/projects-viewer/projects-viewer.component';
+import { ProjectsViewerModule } from './projects/projects-viewer/projects-viewer.module';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import { LoginComponent } from './login/login.component';
     AccountDisplayerComponent,
     ProjectsComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    ProjectsViewerComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +62,8 @@ import { LoginComponent } from './login/login.component';
     MatDividerModule,
     MatRadioModule,
     CdkAccordionModule,
-    MatExpansionModule
+    MatExpansionModule,
+    ProjectsViewerModule
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]

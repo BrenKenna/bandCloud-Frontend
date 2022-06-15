@@ -25,6 +25,11 @@ const routes: Routes = [
   {
     'path': 'account-login',
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
+  },
+
+  {
+    'path': 'projects-viewer',
+    loadChildren: () => import('./projects/projects-viewer/projects-viewer.module').then( m => m.ProjectsViewerModule)
   }
 ];
 

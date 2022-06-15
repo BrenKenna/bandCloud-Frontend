@@ -60,5 +60,11 @@ ng generate enum user_model/accountTypes
 ng generate class user_model/user-display/user-display
 ng generate class user_model/user-display/user-display-update
 
+
+# Create projects module
+ng generate component projects/projects-viewer
+ng generate module projects/projects-viewer --routing
+
+
 # Serve an app: http://localhost:4200
 ng serve
