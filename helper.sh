@@ -61,9 +61,16 @@ ng generate class user_model/user-display/user-display
 ng generate class user_model/user-display/user-display-update
 
 
-# Create projects module
+# Create projects module & models
 ng generate component projects/projects-viewer
 ng generate module projects/projects-viewer --routing
+
+ng generate class projects/model/projects-model
+ng generate class projects/model/project-model
+ng generate class projects/model/file-metadata
+ng generate class projects/model/file-tag
+ng generate class projects/model/token-tag
+
 
 
 # Serve an app: http://localhost:4200
