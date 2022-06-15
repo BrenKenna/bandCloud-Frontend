@@ -5,7 +5,6 @@ import { UserDisplay } from '../user_model/user-display/user-display';
 import { AccountTypes } from '../user_model/account-types';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserDisplayUpdate } from '../user_model/user-display/user-display-update';
-import { Observable } from 'rxjs';
 import { UserValidation } from '../user_model/user-validation';
 
 @Component({

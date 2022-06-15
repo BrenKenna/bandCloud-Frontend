@@ -26,7 +26,6 @@ import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
 import { ReadModePipe } from './read-mode-pipe.pipe';
 import { AccountManagerComponent } from './account-manager/account-manager.component';
 import { AccountDisplayerComponent } from './account-displayer/account-displayer.component';
-import { ProjectsComponent } from './projects/projects.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ProjectsViewerComponent } from './projects/projects-viewer/projects-viewer.component';
@@ -40,7 +39,7 @@ import { ProjectsViewerModule } from './projects/projects-viewer/projects-viewer
     ReadModePipe,
     AccountManagerComponent,
     AccountDisplayerComponent,
-    ProjectsComponent,
+    ProjectsViewerComponent,
     RegisterComponent,
     LoginComponent,
     ProjectsViewerComponent
@@ -62,8 +61,7 @@ import { ProjectsViewerModule } from './projects/projects-viewer/projects-viewer
     MatDividerModule,
     MatRadioModule,
     CdkAccordionModule,
-    MatExpansionModule,
-    ProjectsViewerModule
+    MatExpansionModule
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]

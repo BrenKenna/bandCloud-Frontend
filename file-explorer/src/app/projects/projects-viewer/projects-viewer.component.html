@@ -1,1 +1,10 @@
-<p>projects-viewer works!</p>
+
+<mat-card *ngFor="let project of projects">
+    <mat-card-title>Project Name: {{ project?.projectName }}</mat-card-title>
+    <mat-card-content>
+        <p>Mixed Audio: {{ project?.mixed?.path }}</p>
+        <ul *ngFor="let rawTracks of project?.rawAudio">
+            <li>Raw Audio Track: {{ rawTracks?.path }}</li>
+        </ul>
+    </mat-card-content>
+</mat-card>

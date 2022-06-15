@@ -6,8 +6,22 @@ interface ProjectsModelInterface {
 
 export class ProjectsModel {
 
-    public readonly projects: ProjectModel[];
+    public projects: ProjectModel[] = [];
+
+    /**
+     * 
+     * @param data 
+     */
     constructor(data: ProjectsModelInterface) {
         this.projects = data?.projects ?? [];
+    }
+
+
+    /**
+     * 
+     * @returns 
+     */
+    public getList() {
+        return this.projects;
     }
 }

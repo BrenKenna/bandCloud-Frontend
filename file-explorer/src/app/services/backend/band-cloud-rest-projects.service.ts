@@ -14,7 +14,7 @@ export class BandCloudRestProjectsService {
   };
 
   // Attribute to hold endpoints etc
-  private _rootPath = "http://localhost:8080";
+  private _rootPath = "http://localhost:4200";
   private _paths = {
     "projects": {
         "Requests": ["GET"],
@@ -37,7 +37,7 @@ export class BandCloudRestProjectsService {
    * @returns 
    */
   public getProjects() {
-    return this.http.get<ProjectsModel>(this._paths.projects['projects-viewer'], {"headers": this._requestHeaders});
+    return this.http.get(this._paths.projects['projects-viewer']);
   }
 
 

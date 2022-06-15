@@ -7,7 +7,7 @@ interface ProjectModelInterface {
     projectName: any,
     projectSize: number;
     rawAudio: any;
-    mixedAudio: any;
+    mixed: any;
 }
 
 
@@ -20,7 +20,7 @@ export class ProjectModel {
     public readonly projectName: string;
     public readonly projectSize: number;
     public readonly rawAudio: FileMetadata[];
-    public readonly mixedAudio: FileMetadata;
+    public readonly mixed: FileMetadata;
 
 
     /**
@@ -31,7 +31,7 @@ export class ProjectModel {
         this.projectName = params?.projectName ?? '';
         this.projectSize = params?.projectSize ?? -1;
         this.rawAudio = params?.rawAudio ?? null;
-        this.mixedAudio = params?.projectName ?? null;
+        this.mixed = params?.mixed ?? null;
     }
 
 
@@ -67,6 +67,6 @@ export class ProjectModel {
      * @returns 
      */
      public getMixed() {
-        return this.mixedAudio;
+        return this.mixed;
     }
 }
