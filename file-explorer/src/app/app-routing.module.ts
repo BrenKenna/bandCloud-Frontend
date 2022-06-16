@@ -30,6 +30,11 @@ const routes: Routes = [
   {
     'path': 'projects-viewer',
     loadChildren: () => import('./projects/projects-viewer/projects-viewer.module').then( m => m.ProjectsViewerModule)
+  },
+
+  {
+    'path': 'project-page',
+    loadChildren: () => import('./projects/project-page/project-page.module').then( m => m.ProjectPageModule)
   }
 ];
 

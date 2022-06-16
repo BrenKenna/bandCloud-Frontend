@@ -1,0 +1,48 @@
+<mat-card>
+    <mat-card-title>Single/Multi Track Player</mat-card-title>
+    <mat-card-content>
+        <mat-slider></mat-slider>
+        <br>
+        <mat-divider></mat-divider>
+        <div class="container" fxLayout="row" fxLayoutGap="20px">
+            <button mat-raised-button color="primary">Play</button>
+            <button mat-raised-button color="accent">Pause</button>
+            <button mat-raised-button color="warn">Stop</button>
+        </div>
+    </mat-card-content>
+</mat-card>
+<br>
+<mat-divider></mat-divider>
+<br>
+
+<mat-card>
+    <mat-card-title>Load & Edit</mat-card-title>
+    <mat-card-content  class="container" fxLayout="row" fxLayoutGap="20px">
+
+        <!-- Load/Drop tracks -->
+        <div>
+            <ul *ngFor="let rawTracks of project?.rawAudio">
+                <li id="muliTrackList">
+                    <div>
+                        <span>Raw Audio Track: {{ rawTracks?.path }} </span>
+                        <button mat-raised-button color="accent">Add / Drop</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <mat-divider></mat-divider>
+        <br>
+        <h2>Edit a Raw Track</h2>
+        <div>
+            <span>Active Track: {{ activeTrackEdit }} </span><button mat-button [matMenuTriggerFor]="menu">Choose Track</button>
+            <mat-menu #menu="matMenu">
+                <ul id="trackEditList" *ngFor="let rawTracks of project?.rawAudio">
+                    <li (click)="setActiveTrackEdit(rawTracks?.path)">{{ rawTracks?.path }}</li>
+                </ul>
+            </mat-menu>
+            <h2>Volume Control</h2>
+            <h2>Distortion Control</h2>
+        </div>
+
+    </mat-card-content>
+</mat-card>

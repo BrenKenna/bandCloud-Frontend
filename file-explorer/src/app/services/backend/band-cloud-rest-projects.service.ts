@@ -37,7 +37,7 @@ export class BandCloudRestProjectsService {
    * @returns 
    */
   public getProjects() {
-    return this.http.get(this._paths.projects['projects-viewer']);
+    return this.http.get< ProjectModel[] >(this._paths.projects['projects-viewer']);
   }
 
 

@@ -33,7 +33,7 @@ npm i '@angular/animations' '@angular/material' '@ng-web-apis/audio' '@angular/f
 ng generate component file-picker
 ng generate componenet file-dropzone
 
-# Generate pipe: Transform one value to another
+# Generate pipe: Transform one type to another
 # kinda like how eunms can work with strategy pattern
 ng generate pipe read-mode-pipe
 
@@ -41,6 +41,7 @@ ng generate pipe read-mode-pipe
 ng generate service services/backend/bandCloud-rest-account
 ng generate service services/backend/bandCloud-rest-projects
 ng generate service services/audio/bandCloud-audio
+
 
 # Create account components
 ng generate component account-manager
@@ -67,6 +68,11 @@ ng generate class projects/model/project-model
 ng generate class projects/model/file-metadata
 ng generate class projects/model/file-tag
 ng generate class projects/model/token-tag
+
+
+# Generate project page etc
+ng generate component projects/project-page
+ng generate module projects/project-page --routing
 
 
 

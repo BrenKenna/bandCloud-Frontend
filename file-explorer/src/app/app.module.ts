@@ -6,12 +6,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from "@angular/material/divider";
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSliderModule } from '@angular/material/slider';
 import { HttpClientModule } from '@angular/common/http';
 
 // File explorer
@@ -30,6 +32,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ProjectsViewerComponent } from './projects/projects-viewer/projects-viewer.component';
 import { ProjectsViewerModule } from './projects/projects-viewer/projects-viewer.module';
+import { ProjectPageComponent } from './projects/project-page/project-page.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,8 @@ import { ProjectsViewerModule } from './projects/projects-viewer/projects-viewer
     ProjectsViewerComponent,
     RegisterComponent,
     LoginComponent,
-    ProjectsViewerComponent
+    ProjectsViewerComponent,
+    ProjectPageComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +65,9 @@ import { ProjectsViewerModule } from './projects/projects-viewer/projects-viewer
     MatDividerModule,
     MatRadioModule,
     CdkAccordionModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSliderModule,
+    MatMenuModule
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]
