@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AudioContext } from 'angular-audio-context';
 import { BandCloudAudioService } from 'src/app/services/audio/band-cloud-audio.service';
 import { BandCloudRestProjectsService } from 'src/app/services/backend/band-cloud-rest-projects.service';
@@ -46,6 +46,7 @@ export class ProjectPageComponent implements OnInit {
       }
     );
   }
+
 
   /**
    * 
