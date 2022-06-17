@@ -15,6 +15,7 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSliderModule } from '@angular/material/slider';
 import { HttpClientModule } from '@angular/common/http';
+import { AudioContextModule } from 'angular-audio-context';
 
 // File explorer
 import { NgxFileHelpersModule } from 'ngx-file-helpers';
@@ -67,7 +68,8 @@ import { ProjectPageComponent } from './projects/project-page/project-page.compo
     CdkAccordionModule,
     MatExpansionModule,
     MatSliderModule,
-    MatMenuModule
+    MatMenuModule,
+    AudioContextModule.forRoot('balanced')
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]

@@ -6,7 +6,8 @@ import {AUDIO_CONTEXT} from '@ng-web-apis/audio';
 })
 export class BandCloudAudioService {
 
-  constructor(private readonly audioCtx: AudioContext) { }
+  private audioCtx: any = new (window['AudioContext'] || window['webkitAudioContext'])();
+  constructor() { }
 
 
   public test() {
@@ -27,6 +28,7 @@ export class BandCloudAudioService {
     }
 
     // Connect to audio graph
+    console.dir(whiteNoiseBuffer, {depth: null});
     let soundSrc = this.audioCtx.createBufferSource();
     soundSrc.buffer = whiteNoiseBuffer;
     soundSrc.connect(this.audioCtx.destination);
