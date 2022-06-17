@@ -1,7 +1,14 @@
-<button (click)="beep()">Beeper</button>
+<mat-card>
+    <mat-card-title>Audio Testing</mat-card-title>
+    <mat-card-content>
+        <button mat-raised-button (click)="whiteNoiseGen('whiteNoise1')" color="primary">White Noise-1</button>
+        <button mat-raised-button (click)="whiteNoiseGen('whiteNoise2')" color="accent">White Noise-2</button>
+    </mat-card-content>
+</mat-card>
 <br>
 <mat-divider></mat-divider>
 <br>
+
 <mat-card>
     <mat-card-title>Single/Multi Track Player</mat-card-title>
     <mat-card-content>

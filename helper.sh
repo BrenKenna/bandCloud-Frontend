@@ -27,7 +27,8 @@ ng new file-explorer --routing --style=scss
 cd file-explorer
 
 # Install dependancies
-npm i '@angular/animations' '@angular/material' '@ng-web-apis/audio' '@angular/forms';
+npm i '@angular/animations' '@angular/material' '@angular/forms';
+npm i angular-audio-context;
 
 # Create a new app component
 ng generate component file-picker

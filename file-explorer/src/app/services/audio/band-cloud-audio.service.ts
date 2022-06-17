@@ -1,22 +1,44 @@
 import { Injectable } from '@angular/core';
-import {AUDIO_CONTEXT} from '@ng-web-apis/audio';
+import { AudioContext } from 'angular-audio-context';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BandCloudAudioService {
 
-  private audioCtx: any = new (window['AudioContext'] || window['webkitAudioContext'])();
+  private audioCtx: AudioContext = new (window['AudioContext'] || window['webkitAudioContext'])();
   constructor() { }
 
 
-  public test() {
+  /**
+   * 
+   * @returns 
+   */
+  public getAudioCtx() {
+    return this.audioCtx;
+  }
+
+
+  /**
+   * 
+   */
+  public async manageState() {
+    if (this.audioCtx.state === 'suspended') {
+      await this.audioCtx.resume();
+    }
+  }
+
+
+  /**
+   * 
+   */
+  public whiteNoiseTest() {
     
     // Create an empty 2 second buffer at the sampling rate of AC
     let channels = 2;
     let frameCount = this.audioCtx.sampleRate * 2.0;
     let whiteNoiseBuffer = this.audioCtx.createBuffer(channels, frameCount, this.audioCtx.sampleRate);
-    
+
     // Fill each channel with white noise
     for( let channel = 0; channel < 1; channel++) {
         
@@ -27,10 +49,15 @@ export class BandCloudAudioService {
         }
     }
 
+    // Return white noise buffer
+    return whiteNoiseBuffer;
+
+    /*
     // Connect to audio graph
     console.dir(whiteNoiseBuffer, {depth: null});
     let soundSrc = this.audioCtx.createBufferSource();
     soundSrc.buffer = whiteNoiseBuffer;
     soundSrc.connect(this.audioCtx.destination);
+    */
   }
 }
