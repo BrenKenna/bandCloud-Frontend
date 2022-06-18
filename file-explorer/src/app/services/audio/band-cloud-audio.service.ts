@@ -36,7 +36,7 @@ export class BandCloudAudioService {
     
     // Create an empty 2 second buffer at the sampling rate of AC
     let channels = 2;
-    let frameCount = this.audioCtx.sampleRate * 2.0;
+    let frameCount = this.audioCtx.sampleRate * 10.0;
     let whiteNoiseBuffer = this.audioCtx.createBuffer(channels, frameCount, this.audioCtx.sampleRate);
 
     // Fill each channel with white noise
