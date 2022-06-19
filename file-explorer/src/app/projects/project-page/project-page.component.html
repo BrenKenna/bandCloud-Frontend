@@ -14,11 +14,12 @@
     <mat-card-content>
         <button mat-raised-button (click)="manageWhtNoise_Record()" color="primary">White Noise-1</button>
         <button mat-raised-button (click)="playRecording()" color="accent">Play Record</button>
-        <audio 
+        <button mat-raised-button (click)="playFetchedAudio()" color="warn">Fetch Audio</button>
+        <!--
+            <audio 
                 [src]="whiteNoiseBlob_URL" 
                 controls>
             </audio>
-        <!--
             <mat-divider></mat-divider>
             <br>
             

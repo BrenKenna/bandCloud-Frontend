@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AudioContext } from 'angular-audio-context';
+import { defer, from, Observable, Subject } from 'rxjs';
 import { BandCloudAudioService } from 'src/app/services/audio/band-cloud-audio.service';
 import { BandCloudRestProjectsService } from 'src/app/services/backend/band-cloud-rest-projects.service';
 import { ProjectModel } from '../model/project-model';
@@ -27,6 +29,7 @@ export class ProjectPageComponent implements OnInit {
   public whtNoise: any;
   public recorderState: boolean = false;
   public playingRecord: boolean = false;
+  public fetchedAudio: AudioBuffer;
 
 
   // Button map
@@ -37,7 +40,7 @@ export class ProjectPageComponent implements OnInit {
    * 
    * @param bandServ 
    */
-  constructor(private bandServ: BandCloudRestProjectsService, private audioServ: BandCloudAudioService) {
+  constructor(private bandServ: BandCloudRestProjectsService, private audioServ: BandCloudAudioService, private http: HttpClient) {
     this.audioCtx = audioServ.getAudioCtx();
     this.buttonMap.set('whiteNoise1', false);
     this.buttonMap.set('whiteNoise2', false);
@@ -240,6 +243,49 @@ export class ProjectPageComponent implements OnInit {
     return true;
   }
 
+
+  /**
+   * Return an observable for an audio buffer from get request
+   * 
+   * @returns 
+   */
+  private getAudio() {
+    let subject = new Subject<AudioBuffer>();
+    this.http.get("../../../assets/site_audio_acoustic.mp3", {"responseType": "arraybuffer"}).subscribe(
+      async (data) => {
+        // console.log("\nRunning get audio");
+        let audioBuffProm = await this.audioCtx.decodeAudioData(data);
+        // console.dir(audioBuffProm);
+        subject.next(audioBuffProm);
+    });
+    return subject.asObservable();
+  }
+
+
+
+  /**
+   * Fetch related audio buffer and play it
+   */
+  public playFetchedAudio() {
+    this.audioServ.manageState();
+    this.getAudio().subscribe( ( track ) => {
+      
+      // Configure audio node
+      const trackSource = this.audioCtx.createBufferSource();
+      trackSource.buffer = track;
+      trackSource.connect(this.audioCtx.destination);
+
+
+      // Play audio and define onended
+      trackSource.start();
+      trackSource.onended = () => {
+        this.playingRecord = false;
+        trackSource.disconnect();
+        this.audioCtx.suspend();
+      };
+    });
+    //console.log("Hello");
+  }
 
   /**
    * 
