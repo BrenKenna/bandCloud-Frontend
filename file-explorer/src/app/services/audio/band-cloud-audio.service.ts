@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AudioContext } from 'angular-audio-context';
+import { Observable, Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +9,7 @@ import { AudioContext } from 'angular-audio-context';
 export class BandCloudAudioService {
 
   private audioCtx: AudioContext = new (window['AudioContext'] || window['webkitAudioContext'])();
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
 
   /**
@@ -51,13 +53,85 @@ export class BandCloudAudioService {
 
     // Return white noise buffer
     return whiteNoiseBuffer;
-
-    /*
-    // Connect to audio graph
-    console.dir(whiteNoiseBuffer, {depth: null});
-    let soundSrc = this.audioCtx.createBufferSource();
-    soundSrc.buffer = whiteNoiseBuffer;
-    soundSrc.connect(this.audioCtx.destination);
-    */
   }
+
+
+  /**
+   * Attach an audio buffer to main dest
+   * 
+   * @param track 
+   */
+  public attachTrackToMain(track: AudioBuffer) {
+
+    // Configure audio node
+    const trackSource = this.audioCtx.createBufferSource();
+    trackSource.buffer = track;
+    trackSource.connect(this.audioCtx.destination);
+  }
+
+
+
+  /**
+   * Return an observable for a an audio buffer from a url string
+   * 
+   * @param path 
+   * @returns 
+   */
+  public getAudio(urlStr: string) {
+
+    //
+    // "../../../assets/site_audio_acoustic.mp3"
+    let subject = new Subject<AudioBuffer>();
+    this.http.get(urlStr, {"responseType": "arraybuffer"}).subscribe(
+      async (data) => {
+        let audioBuffProm = await this.audioCtx.decodeAudioData(data);
+        subject.next(audioBuffProm);
+    });
+    return subject.asObservable();
+  }
+
+
+  /**
+   * Fetch an audio buffer from a blob
+   * 
+   * @param arr 
+   * @returns 
+   */
+  public async getRecordingBuffer(arr: Blob) {
+
+    // Manage state
+    if (arr.size == 0) {
+      console.log("Recording in progress");
+      return null;
+    }
+
+    // Fetch buffer
+    const buffer = await arr.arrayBuffer();
+    const audioBuffer = await this.audioCtx.decodeAudioData(buffer);
+    return audioBuffer;
+  }
+
+
+  /**
+   * Generate a distortion curve from user prompt and length of audio track
+   * 
+   * @param amount 
+   * @param trackLength 
+   * @returns 
+   */
+  public distortionCurve(amount: number, trackLength: number) {
+
+    // Initalize output curve
+    const curve = new Float32Array(trackLength),
+      deg = Math.PI / 180;
+    
+    // Populate distortion curve
+    for ( let i = 0 ; i < trackLength; ++i ) {
+      let elmNorm = (i * 2) / (trackLength - 1);
+      curve[i] = ( (3 + amount) * (elmNorm * 20 * deg) ) / ( (Math.PI + amount) * Math.abs(elmNorm) );
+    }
+
+    // Return distortion curve
+    return curve;
+  };
 }
