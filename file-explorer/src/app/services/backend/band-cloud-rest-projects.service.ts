@@ -20,7 +20,8 @@ export class BandCloudRestProjectsService {
         "Requests": ["GET"],
         "root" : this._rootPath + "/projects",
         "projects-viewer": this._rootPath + "/projects/listProjects",
-        "project-viewer": this._rootPath + "/projects/listProject"
+        "project-viewer": this._rootPath + "/projects/listProject",
+        "post-recording": this._rootPath + "/projects/post-recording"
     }
   };
 
@@ -49,5 +50,18 @@ export class BandCloudRestProjectsService {
   public get_singleProject(projectName: string) {
     let url = `${this._paths.projects['project-viewer']}/?projectName=${projectName}`;
     return this.http.get<ProjectModel>(url, {"headers": this._requestHeaders});
+  }
+
+
+  /**
+   * Post audio recording
+   * 
+   * @param data 
+   * @returns 
+   */
+  public postAudio( data: string | ArrayBuffer ) {
+    let url = `${this._paths.projects['post-recording']}`;
+    let postHeaders = { "headers": {'type' : 'audio/ogg; codecs=opus'}};
+    return this.http.post<string>(url, data, postHeaders);
   }
 }

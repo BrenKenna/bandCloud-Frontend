@@ -156,8 +156,8 @@ export class ProjectPageComponent implements OnInit {
 
     // Push captured to: whiteNoiseBlob_URL
     this.recorder.onstop = ( ) => {
-      let blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
-      this.whiteNoiseBlob_URL = URL.createObjectURL(blob);
+      this.whiteNoiseBlob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
+      this.whiteNoiseBlob_URL = URL.createObjectURL(this.whiteNoiseBlob);
       console.log("White blob generated");
       console.dir(this.whiteNoiseBlob_URL, {depth: null });
       this.buttonMap.set('recordWhtNoise', false);
@@ -285,6 +285,31 @@ export class ProjectPageComponent implements OnInit {
       };
     });
     //console.log("Hello");
+  }
+
+
+  public postRecording() {
+
+    // Related vars
+    // this.whiteNoiseBlob
+    // this.whiteNoiseBlob_URL
+    // this.chunks
+    if ( this.whiteNoiseBlob_URL == null ) {
+      console.log("Recording data not yet available");
+      return false;
+    }
+
+    // Read blob
+    let reader = new FileReader();
+    reader.readAsDataURL(this.whiteNoiseBlob);
+    reader.onloadend = () => {
+      console.log(`Blob-64 Size = ${reader.result.toString().length}`);
+      this.bandServ.postAudio(reader.result).subscribe(
+        (data) => {
+            console.dir(data);
+      });
+    }
+    return true;
   }
 
   /**
