@@ -7,6 +7,7 @@ interface UserDisplayInterface {
     username: any;
     email: any;
     password: any;
+    accountHolder: any;
 }
 
 export class UserDisplayUpdate {
@@ -15,7 +16,7 @@ export class UserDisplayUpdate {
     private username: string;
     private email: string;
     private password: string;
-    // private accountType: string;
+    private accountHolder: string;
 
     
     /**
@@ -28,6 +29,7 @@ export class UserDisplayUpdate {
         this.username = userUpdates?.username ?? "";
         this.email = userUpdates?.email ?? "";
         this.password = userUpdates?.password ?? "";
+        this.accountHolder = userUpdates?.accountHolder ?? "";
     }
 
     /**
@@ -62,7 +64,7 @@ export class UserDisplayUpdate {
      * @returns 
      */
     public getAccountType() {
-        return "";
+        return this.accountHolder;
     }
 
 
@@ -90,5 +92,14 @@ export class UserDisplayUpdate {
      */
      public updateFor_Pass() {
         return this.password !== '';
+    }
+
+
+    /**
+     * 
+     * @returns 
+     */
+     public updateFor_Account() {
+        return this.accountHolder !== '';
     }
 }

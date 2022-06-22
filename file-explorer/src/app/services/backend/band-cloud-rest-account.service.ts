@@ -126,11 +126,11 @@ export class BandCloudRestAccountService {
    * @param pass 
    * @returns 
    */
-  public update(userData: UserDisplayUpdate, name: boolean, email: boolean, pass: boolean) {
+  public update(userData: UserDisplayUpdate, name: boolean, email: boolean, pass: boolean, account: boolean) {
 
     // Manage request data
     let msg = JSON.stringify(userData);
-    let uri = `${this._paths.account.display.update.path}?updateName=${name}&updateEmail=${email}&updateAuth=${pass}`;
+    let uri = `${this._paths.account.display.update.path}?updateName=${name}&updateEmail=${email}&updateAuth=${pass}&updateAccount=${account}`;
 
     // Santy check request data
     console.log(`

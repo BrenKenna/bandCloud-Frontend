@@ -69,7 +69,8 @@ export class AccountDisplayerComponent implements OnInit {
     this.userUpdates = new UserDisplayUpdate({
       username: this.updates.controls['username'].value,
       email: this.updates.controls['email'].value,
-      password: this.updates.controls['newPass'].value
+      password: this.updates.controls['newPass'].value,
+      accountHolder: this.updates.controls['accountType'].value
     });
     console.dir(this.userUpdates, {depth: null});
 
@@ -78,7 +79,8 @@ export class AccountDisplayerComponent implements OnInit {
     let updateMap = {
       "username": this.userUpdates.updateFor_Name(),
       "email": this.userUpdates.updateFor_Email(),
-      "password": this.userUpdates.updateFor_Pass()
+      "password": this.userUpdates.updateFor_Pass(),
+      "accountType": this.userUpdates.updateFor_Account()
     }
     console.dir(updateMap, {depth: null});
 
@@ -88,7 +90,8 @@ export class AccountDisplayerComponent implements OnInit {
       this.userUpdates,
       updateMap.username,
       updateMap.email,
-      updateMap.password
+      updateMap.password,
+      updateMap.accountType
     );
 
 
