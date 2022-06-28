@@ -127,13 +127,13 @@ export class BandCloudAudioService {
 
     // Manage size
     if ( trackA.buffer.length > trackB.buffer.length) {
-      console.log(`Chose track-1 = ${trackA.buffer.length}, over track-2 = ${trackB.buffer.length}`);
+      // console.log(`Chose track-1 = ${trackA.buffer.length}, over track-2 = ${trackB.buffer.length}`);
       outputBuffer = this.audioCtx.createBuffer(trackA.buffer.numberOfChannels, trackA.buffer.length, trackA.buffer.sampleRate);
       indexOfBiggest = 1;
       holder[0] = trackB;
       holder[1] = trackA;
     } else if ( trackB.buffer.length > trackA.buffer.length ) {
-      console.log(`Chose track-2 = ${trackB.buffer.length}, over track-1=  ${trackA.buffer.length}`);
+      // console.log(`Chose track-2 = ${trackB.buffer.length}, over track-1=  ${trackA.buffer.length}`);
       outputBuffer = this.audioCtx.createBuffer(trackB.buffer.numberOfChannels, trackB.buffer.length, trackB.buffer.sampleRate);
       indexOfBiggest = 1;
     }
@@ -157,7 +157,6 @@ export class BandCloudAudioService {
         // Add two elements
         const elm = ( (smallest*1.75) + (holder[1].buffer.getChannelData(chan)[counter] * 1.5)); // Mixing adds, Multiplying & Dividing sounds mad, polynomials are daft and one swamps the other
         audioData.push(elm);
-        // console.log(newChanAudio[counter]);
         // holder[1].buffer.getChannelData(chan)[counter] = elm; // Mix on the fly
         counter++;
         sum = (sum + elm); // Sanity check data has being recieved and just a bunch of zeros
@@ -174,8 +173,7 @@ export class BandCloudAudioService {
       // Copy data into channel
       let newChanAudio = new Float32Array(audioData);
       outputBuffer.copyToChannel(newChanAudio, chan);
-      console.log(`Audio data size = ${newChanAudio.length}, sum = ${sum}`);
-      
+      // console.log(`Audio data size = ${newChanAudio.length}, sum = ${sum}`);
     }
 
     // Return buffer

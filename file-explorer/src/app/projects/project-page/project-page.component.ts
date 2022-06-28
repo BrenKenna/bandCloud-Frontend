@@ -332,8 +332,8 @@ export class ProjectPageComponent implements OnInit {
     this.audioServ.manageState();
 
     // Fetch buffer
-    let whtBuff_a = this.audioServ.whiteNoiseTest(1);
-    let whtBuff_b = this.audioServ.whiteNoiseTest(1);
+    let whtBuff_a = this.audioServ.whiteNoiseTest(2);
+    let whtBuff_b = this.audioServ.whiteNoiseTest(5);
 
     // Configure audio node
     const trackSourceA = this.audioCtx.createBufferSource();
@@ -352,7 +352,7 @@ export class ProjectPageComponent implements OnInit {
 
     // Play tracks
     trackSourceA.start();
-    trackSourceB.start(this.audioCtx.currentTime + 12);
+    trackSourceB.start(this.audioCtx.currentTime + 6);
     console.dir(trackSourceA, {depth: null});
     console.dir(trackSourceB, {depth: null});
 
@@ -391,12 +391,14 @@ export class ProjectPageComponent implements OnInit {
     trackSourceB.buffer = this.audioServ.whiteNoiseTest(2);
 
     // Mix & connecy audio signals
+    /*
     console.log("\nCreating a new mixed audio signal");
     console.log("\nSummarizin tracks");
     console.log(`
       Biggest = ${this.audioServ.sumAudioBuffer(trackSourceA.buffer)},
       Smallest = ${this.audioServ.sumAudioBuffer(trackSourceB.buffer)}`
     );
+    */
     const trackPlaying = this.audioCtx.createBufferSource();
     const trackData = this.audioServ.mixTracks(trackSourceA, trackSourceB);
     trackPlaying.buffer = trackData;
