@@ -16,6 +16,7 @@
         <button mat-raised-button (click)="playRecording()" color="accent">Play Record</button>
         <button mat-raised-button (click)="postRecording()" color="primary">Post Recording</button>
         <button mat-raised-button (click)="playFetchedAudio()" color="warn">Fetch Audio</button>
+        <br>
         <!--
             <audio 
                 [src]="whiteNoiseBlob_URL" 
@@ -30,6 +31,16 @@
 <br>
 <mat-divider></mat-divider>
 <br>
+
+<mat-card>
+    <mat-card-title>Mix Audio</mat-card-title>
+   <!--
+    <button mat-raised-button (click)="mixAudio()">whiteNoise-1</button>
+    <button mat-raised-button (click)="mixAudio()">whiteNoise-2</button>
+   -->
+    <button mat-raised-button (click)="multiTrackPlay()" color="primary">MultiTrack Play</button>
+    <button mat-raised-button (click)="mixTracks()" color="primary">Mix & Play</button>
+</mat-card>
 
 <!--
 <mat-card>

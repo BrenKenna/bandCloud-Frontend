@@ -48,7 +48,8 @@ export class BandCloudRestAccountService {
   /**
    * Construct service with http client, methods returns observables
    * 
-   * @param http 
+   * @param http
+   *
    */
   constructor(private http: HttpClient) {}
 
@@ -58,7 +59,8 @@ export class BandCloudRestAccountService {
    * 
    * @param username
    * @param email 
-   * @param password 
+   * @param password
+   *
    */
   public register(username: String, email: String, password: String, accountHolder: String) {
     console.log("A Registration request has being sent");
@@ -77,7 +79,8 @@ export class BandCloudRestAccountService {
    * 
    * @param username
    * @param email 
-   * @param password 
+   * @param password
+   * 
    */
    public login(username: String, email: String, password: String) {
     console.log("A Login request has being sent");
@@ -95,7 +98,8 @@ export class BandCloudRestAccountService {
    * 
    * @param username
    * @param email 
-   * @param password 
+   * @param password
+   * 
    */
    public deregister(username: String, email: String, password: String) {
     console.log("A Deregistration post request has being sent");
@@ -106,6 +110,7 @@ export class BandCloudRestAccountService {
     });
     return this.http.post(this._paths.account.manager.register, msg, {"headers": this._requestHeaders});
   }
+
 
   /**
    * Return observable for getting account data
@@ -123,7 +128,8 @@ export class BandCloudRestAccountService {
    * @param userData 
    * @param name 
    * @param email 
-   * @param pass 
+   * @param pass
+   * 
    * @returns 
    */
   public update(userData: UserDisplayUpdate, name: boolean, email: boolean, pass: boolean, account: boolean) {

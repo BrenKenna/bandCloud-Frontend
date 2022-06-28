@@ -34,11 +34,11 @@ export class BandCloudAudioService {
   /**
    * 
    */
-  public whiteNoiseTest() {
+  public whiteNoiseTest(trackLength: number) {
     
     // Create an empty 2 second buffer at the sampling rate of AC
     let channels = 2;
-    let frameCount = this.audioCtx.sampleRate * 10.0;
+    let frameCount = this.audioCtx.sampleRate * (10.0 / trackLength );
     let whiteNoiseBuffer = this.audioCtx.createBuffer(channels, frameCount, this.audioCtx.sampleRate);
 
     // Fill each channel with white noise
@@ -110,6 +110,76 @@ export class BandCloudAudioService {
     const audioBuffer = await this.audioCtx.decodeAudioData(buffer);
     return audioBuffer;
   }
+
+
+
+  /**
+   * 
+   * @param trackA 
+   * @param trackB 
+   * @returns 
+   */
+  public mixTracks(trackA: any, trackB: any) {
+
+    // Initalize
+    let indexOfBiggest, outputBuffer: AudioBuffer;
+    let holder = [ trackA, trackB ];
+
+    // Manage size
+    if ( trackA.buffer.length > trackB.buffer.length) {
+      console.log("Chose track 1");
+      outputBuffer = this.audioCtx.createBuffer(trackA.buffer.numberOfChannels, trackA.buffer.length, trackA.buffer.sampleRate);
+      indexOfBiggest = 0;
+      holder[0] = trackB;
+      holder[1] = trackA;
+    } else if ( trackB.buffer.length > trackA.buffer.length ) {
+      console.log("Chose track 2");
+      outputBuffer = this.audioCtx.createBuffer(trackB.buffer.numberOfChannels, trackB.buffer.length, trackB.buffer.sampleRate);
+      indexOfBiggest = 1;
+    }
+    else {
+      console.log(`Tracks are same length: ${trackA.buffer.length == trackB.buffer.length}`);
+      outputBuffer = this.audioCtx.createBuffer(trackA.buffer.numberOfChannels, trackA.buffer.length, trackA.buffer.sampleRate);
+      indexOfBiggest = 0;
+    }
+
+    // Populate each output channel with a 32Float array
+    for(let chan = 0; chan < outputBuffer.numberOfChannels; chan++){
+                    
+      // Initalize the new audio array
+      let counter = 0;
+      let newChanAudio = new Float32Array();
+      
+      // Populate from the smallest: Hardcoded for now
+      let sum = 0;
+      for( const smallest of holder[0].buffer.getChannelData(chan).values() ) {
+                        
+        // Add two elements
+        const elm = ( (smallest*1.75) +  (holder[1].buffer.getChannelData(chan)[counter] * 1.5)); // Mixing adds, Multiplying & Dividing sounds mad, polynomials are daft and one swamps the other
+        newChanAudio[counter] = elm;
+        holder[1].buffer.getChannelData(chan)[counter] = elm; // Mix on the fly
+        counter++;
+        sum = (sum + elm); // Sanity check data has being recieved and just a bunch of zeros
+      }
+
+      // Finish populating the channel with data from the largest array
+      console.log(`New Audio Channel-${chan + 1} = ${newChanAudio.length}, ${counter}, sum = ${sum}`);
+      for (let i = counter; i < holder[1].buffer.getChannelData(chan).length; i++) {
+        const elm = holder[1].buffer.getChannelData(chan)[i];
+        newChanAudio[counter] = elm;
+        counter++;
+        sum = (sum + elm);
+      }
+
+      // Copy data into channel
+      console.log(`\nAdding data into channel-${chan}, size = ${newChanAudio.length}`);
+      outputBuffer.copyToChannel(newChanAudio, chan);
+    }
+
+    // Return buffer
+    return outputBuffer;
+  }
+
 
 
   /**

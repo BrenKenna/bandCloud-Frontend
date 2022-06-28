@@ -30,6 +30,7 @@ export class ProjectPageComponent implements OnInit {
   public recorderState: boolean = false;
   public playingRecord: boolean = false;
   public fetchedAudio: AudioBuffer;
+  public activeAudio: AudioBuffer[] = [];
 
 
   // Button map
@@ -102,7 +103,7 @@ export class ProjectPageComponent implements OnInit {
     this.audioServ.manageState();
 
     // Fetch buffer
-    let whiteNoiseBuffer = this.audioServ.whiteNoiseTest();
+    let whiteNoiseBuffer = this.audioServ.whiteNoiseTest(1);
 
     // Attach
     let soundSrc = this.audioCtx.createBufferSource();
@@ -137,7 +138,7 @@ export class ProjectPageComponent implements OnInit {
     // Attach
     let dest = this.audioCtx.createMediaStreamDestination();
     this.whtNoise = this.audioCtx.createBufferSource();
-    this.whtNoise.buffer = this.audioServ.whiteNoiseTest();
+    this.whtNoise.buffer = this.audioServ.whiteNoiseTest(1);
     console.log("Checking white noise buffer");
     console.dir(this.whtNoise, { depth: null });
 
@@ -320,4 +321,100 @@ export class ProjectPageComponent implements OnInit {
     this.activeTrackEdit = input;
   }
 
+
+
+  /**
+   * 
+   */
+  public multiTrackPlay() {
+
+    // Manage state
+    this.audioServ.manageState();
+
+    // Fetch buffer
+    let whtBuff_a = this.audioServ.whiteNoiseTest(1);
+    let whtBuff_b = this.audioServ.whiteNoiseTest(1);
+
+    // Configure audio node
+    const trackSourceA = this.audioCtx.createBufferSource();
+    trackSourceA.buffer = whtBuff_a;
+    trackSourceA.connect(this.audioCtx.destination);
+
+    // Configure audio node
+    const trackSourceB = this.audioCtx.createBufferSource();
+    trackSourceB.buffer = whtBuff_b;
+    trackSourceB.connect(this.audioCtx.destination);
+
+    // Scope out
+    console.log("\nChecking audio context\n");
+    console.dir(this.audioCtx.destination, {depth: null});
+    console.dir(this.audioCtx, {depth: null});
+
+    // Play tracks
+    trackSourceA.start();
+    trackSourceB.start(this.audioCtx.currentTime + 12);
+    console.dir(trackSourceA, {depth: null});
+    console.dir(trackSourceB, {depth: null});
+
+    // Stop tracks at different times
+    trackSourceB.stop(this.audioCtx.currentTime + 12 + 2);
+
+
+    //
+    trackSourceA.onended = () => {
+      console.log("Track-A ended");
+      this.playingRecord = false;
+      trackSourceA.disconnect();
+    };
+    trackSourceB.onended = () => {
+      console.log("Track-B ended");
+      this.playingRecord = false;
+      trackSourceB.disconnect();
+    };
+  }
+
+
+  /**
+   * Mix two white noise tracks
+   */
+  public mixTracks() {
+
+    // Manage state
+    this.audioServ.manageState();
+
+    // Create first node
+    const trackSourceA = this.audioCtx.createBufferSource();
+    trackSourceA.buffer = this.audioServ.whiteNoiseTest(1);
+
+    // Create second node
+    const trackSourceB = this.audioCtx.createBufferSource();
+    trackSourceB.buffer = this.audioServ.whiteNoiseTest(2);
+
+    // Mix & connecy audio signals
+    console.log("\nCreating a new mixed audio signal");
+    const trackPlaying = this.audioCtx.createBufferSource();
+    const trackData = this.audioServ.mixTracks(trackSourceA, trackSourceB);
+    console.dir(trackData, {depth: null})
+    trackPlaying.buffer = trackData;
+    trackPlaying.connect(this.audioCtx.destination);
+
+    // Play track
+    console.log(`Attempting to play mixed track, length = ${trackPlaying.buffer.getChannelData(0).length}`);
+    trackPlaying.start();
+    console.dir(trackPlaying, {depth: null});
+    trackPlaying.onended =
+    () => {
+        console.log("Mixed track has ended");
+        trackPlaying.disconnect();
+    };
+    
+    // Play main trak
+    trackSourceA.connect(this.audioCtx.destination);
+    trackSourceA.start();
+    trackSourceA.onended =
+    () => {
+        console.log("Biggest track has ended");
+        trackSourceA.disconnect();
+    };
+  }
 }
