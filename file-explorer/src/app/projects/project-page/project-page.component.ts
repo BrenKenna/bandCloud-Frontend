@@ -392,28 +392,34 @@ export class ProjectPageComponent implements OnInit {
 
     // Mix & connecy audio signals
     console.log("\nCreating a new mixed audio signal");
+    console.log("\nSummarizin tracks");
+    console.log(`
+      Biggest = ${this.audioServ.sumAudioBuffer(trackSourceA.buffer)},
+      Smallest = ${this.audioServ.sumAudioBuffer(trackSourceB.buffer)}`
+    );
     const trackPlaying = this.audioCtx.createBufferSource();
     const trackData = this.audioServ.mixTracks(trackSourceA, trackSourceB);
-    console.dir(trackData, {depth: null})
     trackPlaying.buffer = trackData;
     trackPlaying.connect(this.audioCtx.destination);
 
     // Play track
-    console.log(`Attempting to play mixed track, length = ${trackPlaying.buffer.getChannelData(0).length}`);
+    console.log(`\nAttempting to play mixed track, length = ${trackPlaying.buffer.getChannelData(0).length}`);
     trackPlaying.start();
-    console.dir(trackPlaying, {depth: null});
     trackPlaying.onended =
     () => {
-        console.log("Mixed track has ended");
+        console.log(`Mixed track has ended`);
+        //console.log(`Sum track-mixed = ${this.audioServ.sumAudioBuffer(trackPlaying.buffer)}`);
         trackPlaying.disconnect();
     };
     
-    // Play main trak
+    // Play main track
+    console.log(`\nAttempting to play biggest track, length = ${trackSourceA.buffer.getChannelData(0).length}`);
     trackSourceA.connect(this.audioCtx.destination);
     trackSourceA.start();
     trackSourceA.onended =
     () => {
-        console.log("Biggest track has ended");
+        console.log(`Biggest track has ended`);
+        //console.log(`Sum track-biggest = ${this.audioServ.sumAudioBuffer(trackSourceA.buffer)}`);
         trackSourceA.disconnect();
     };
   }
