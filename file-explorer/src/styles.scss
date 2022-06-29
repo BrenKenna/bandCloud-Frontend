@@ -17,3 +17,28 @@ body {
 .register-radio-btn {
   margin: 5px;
 }
+
+.filler {
+  flex: 1 1 auto;
+}
+
+main {
+  padding: 20px;
+}
+
+.tab-container {
+  padding: 5px;
+}
+
+
+.account-loginReg {
+display: flex;
+flex-direction: row;
+justify-content: flex-start;
+gap: 45px;
+}
+
+.accountCard {
+display: block;
+width: 40%;
+}

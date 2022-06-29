@@ -1,4 +1,6 @@
-﻿    <form [formGroup]="form" (ngSubmit)="submitForm()">
+﻿<mat-card class="accountCard">
+    <mat-card-title>Register Account</mat-card-title>
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
             <mat-form-field appearance="standard">
                 <mat-label>Username</mat-label>
                 <input matInput maxlength="20" inputmode="tel" placeholder="Please Enter Username" formControlName="username" #username>
@@ -54,4 +56,5 @@
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Register
             </button>
-        </form>
+    </form>
+</mat-card>

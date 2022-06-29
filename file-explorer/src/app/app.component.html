@@ -1,58 +1,19 @@
 <mat-toolbar color="primary">
-  <h1>File Picker and Account Controller</h1>
+  <h1>bandCloud</h1>
   <span class="filler"></span>
   <a href="https://github.com/BrenKenna/ionic-file-explorer" mat-button>
     GitHub
   </a>
 </mat-toolbar>
 
-<main class="mat-typography">
-  <mat-tab-group dynamicHeight="true">
-    <mat-tab label="File Picker">
-      <div class="tab-container">
-        <app-file-picker></app-file-picker>
-      </div>
-    </mat-tab>
-
-    <mat-tab label="File Dropzone">
-      <div class="tab-container">
-        <app-file-dropzone></app-file-dropzone>
-      </div>
-    </mat-tab>
-
-    <mat-tab label="Login/Register">
-      <div class="tab-container">
-        
-        <div class="account-loginReg">
-          <mat-card class="accountCard">
-            <mat-card-title>Register Account</mat-card-title>
-            <app-register></app-register>
-          </mat-card>
-
-          <mat-card class="accountCard">
-            <mat-card-title>Login</mat-card-title>
-            <app-login></app-login>
-          </mat-card>
-        </div>
-      </div>
-    </mat-tab>
-
-    <mat-tab label="Account Details">
-      <div class="tab-container">
-        <app-account-displayer></app-account-displayer>
-      </div>
-    </mat-tab>
-
-    <mat-tab label="Projects View">
-      <div class="tab-container">
-        <app-projects-viewer></app-projects-viewer>
-      </div>
-    </mat-tab>
-
-    <mat-tab label="Workbench">
-      <div class="tab-container">
-        <app-project-page></app-project-page>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-</main>
+<nav mat-tab-nav-bar>
+  <a mat-tab-link 
+      *ngFor="let tab of tabs"
+      [routerLink]="tab.route"
+      routerLinkActive #rla="routerLinkActive"
+      [active]="rla.isActive"
+  >
+    <span>{{ tab.label }}</span>
+  </a>
+</nav>
+<router-outlet></router-outlet>

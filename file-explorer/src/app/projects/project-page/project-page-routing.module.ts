@@ -5,7 +5,7 @@ import { ProjectPageComponent } from './project-page.component';
 const routes: Routes = [
 
   {
-    path: 'project-page',
+    path: '',
     component: ProjectPageComponent
   }
 

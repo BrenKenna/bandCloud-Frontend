@@ -5,7 +5,7 @@ import { AccountDisplayerComponent } from './account-displayer.component';
 
 const routes: Routes = [
   {
-    path: 'display-view',
+    path: '',
     component: AccountDisplayerComponent
   }
 ];

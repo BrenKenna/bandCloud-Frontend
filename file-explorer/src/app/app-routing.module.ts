@@ -3,18 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    'path': '',
+    path: '',
+    redirectTo: 'register',
+    pathMatch: 'full'
+  },
+  {
+    'path': 'register',
     loadChildren: () => import('./register/register.module').then(m => m.RegisterModule)
-  },
-
-  {
-    'path': 'picker',
-    loadChildren: () => import('./file-picker/file-picker.module').then(m => m.FilePickerModule)
-  },
-
-  {
-    'path': 'dropzone',
-    loadChildren: () => import('./file-dropzone/file-dropzone.module').then(m => m.FileDropzoneModule)
   },
 
   {
@@ -36,6 +31,19 @@ const routes: Routes = [
     'path': 'project-page',
     loadChildren: () => import('./projects/project-page/project-page.module').then( m => m.ProjectPageModule)
   }
+
+  /*
+    Dropped from prototype
+  {
+    'path': 'picker',
+    loadChildren: () => import('./file-picker/file-picker.module').then(m => m.FilePickerModule)
+  },
+
+  {
+    'path': 'dropzone',
+    loadChildren: () => import('./file-dropzone/file-dropzone.module').then(m => m.FileDropzoneModule)
+  },
+  */
 ];
 
 @NgModule({

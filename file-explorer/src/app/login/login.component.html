@@ -1,3 +1,5 @@
+<mat-card class="accountCard">
+    <mat-card-title>Account Login</mat-card-title>
     <form [formGroup]="form" (ngSubmit)="submitForm()">
             <mat-form-field appearance="standard">
                 <mat-label>Username</mat-label>
@@ -36,4 +38,5 @@
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Login
             </button>
-        </form>
+    </form>
+</mat-card>
