@@ -42,6 +42,21 @@
     <button mat-raised-button (click)="mixTracks()" color="primary">Mix & Play</button>
 </mat-card>
 
+
+<br>
+<mat-divider></mat-divider>
+<br>
+
+<mat-card>
+    <mat-card-title>Record Audio</mat-card-title>
+    <audio controls="" *ngIf="mikeRecordURL">
+        <source [src]="sanitize(mikeRecordURL)" type="audio/wav">
+    </audio>
+    <button mat-raised-button (click)="recordMicoPhone()" color="primary">Record Audio</button>
+    <button mat-raised-button (click)="stopRecording()" color="primary">Stop Recording</button>
+</mat-card>
+
+
 <!--
 <mat-card>
     <mat-card-title>Single/Multi Track Player</mat-card-title>

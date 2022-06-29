@@ -6,6 +6,8 @@ import { BandCloudAudioService } from 'src/app/services/audio/band-cloud-audio.s
 import { BandCloudRestProjectsService } from 'src/app/services/backend/band-cloud-rest-projects.service';
 import { ProjectModel } from '../model/project-model';
 
+import * as RecordRTC from 'recordrtc';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-project-page',
   templateUrl: './project-page.component.html',
@@ -33,15 +35,24 @@ export class ProjectPageComponent implements OnInit {
   public activeAudio: AudioBuffer[] = [];
 
 
+  // Microphone recording
+  public mikeRecord: any;
+  public recording: boolean = false;
+
   // Button map
   public buttonMap: Map<string, boolean> = new Map();
-
+  public mikeRecordURL: string;
 
   /**
    * 
    * @param bandServ 
    */
-  constructor(private bandServ: BandCloudRestProjectsService, private audioServ: BandCloudAudioService, private http: HttpClient) {
+  constructor(
+    private bandServ: BandCloudRestProjectsService,
+    private audioServ: BandCloudAudioService,
+    private http: HttpClient,
+    private domSanitizer: DomSanitizer
+  ) {
     this.audioCtx = audioServ.getAudioCtx();
     this.buttonMap.set('whiteNoise1', false);
     this.buttonMap.set('whiteNoise2', false);
@@ -424,5 +435,66 @@ export class ProjectPageComponent implements OnInit {
         //console.log(`Sum track-biggest = ${this.audioServ.sumAudioBuffer(trackSourceA.buffer)}`);
         trackSourceA.disconnect();
     };
+  }
+
+
+
+  /**
+   * 
+   * @returns 
+   */
+  public recordMicoPhone() {
+
+    // Log unavailable if media devices is not supported
+    if ( !navigator.mediaDevices) {
+      console.log("Get user media not supported by browser");
+      return false;
+    }
+
+    // Get user media stream
+    navigator.mediaDevices.getUserMedia({audio: true})
+      .then(this.recordSuccessCallBack.bind(this));
+    return true;
+  }
+
+
+  /**
+   * 
+   * @param stream 
+   */
+  public recordSuccessCallBack(stream: MediaStream) {
+
+    // Record mike
+    this.recording = true;
+    this.mikeRecord = new RecordRTC.StereoAudioRecorder(stream);
+    this.mikeRecord.record();
+  }
+
+
+  /**
+   * 
+   */
+  public stopRecording() {
+    this.recording = false;
+    this.mikeRecord.stop(this.processRecording.bind(this));
+  }
+
+
+  /**
+   * 
+   * @param blob 
+   */
+  public processRecording(blob: Blob) {
+    this.mikeRecordURL = URL.createObjectURL(blob);
+  }
+
+
+  /**
+   * 
+   * @param url 
+   * @returns 
+   */
+  public sanitize(url: string) {
+    return this.domSanitizer.bypassSecurityTrustUrl(url);
   }
 }
