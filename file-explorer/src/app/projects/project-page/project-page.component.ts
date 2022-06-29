@@ -38,6 +38,7 @@ export class ProjectPageComponent implements OnInit {
   // Microphone recording
   public mikeRecord: any;
   public recording: boolean = false;
+  public recordingBlob: Blob;
 
   // Button map
   public buttonMap: Map<string, boolean> = new Map();
@@ -485,6 +486,7 @@ export class ProjectPageComponent implements OnInit {
    * @param blob 
    */
   public processRecording(blob: Blob) {
+    this.recordingBlob = blob;
     this.mikeRecordURL = URL.createObjectURL(blob);
   }
 
@@ -496,5 +498,30 @@ export class ProjectPageComponent implements OnInit {
    */
   public sanitize(url: string) {
     return this.domSanitizer.bypassSecurityTrustUrl(url);
+  }
+
+
+
+  /**
+   * 
+   * @returns 
+   */
+  public postTrack() {
+    if ( this.mikeRecordURL == null ) {
+      console.log("Recording data not yet available");
+      return false;
+    }
+
+    // Read blob
+    let reader = new FileReader();
+    reader.readAsDataURL(this.recordingBlob);
+    reader.onloadend = () => {
+      console.log(`Blob-64 Size = ${reader.result.toString().length}`);
+      this.bandServ.postAudio(reader.result).subscribe(
+        (data) => {
+            console.dir(data);
+      });
+    }
+    return true;
   }
 }
