@@ -1,15 +1,17 @@
 /**
  * App to serve the SPA and proxy requests to backend resources
- *  => Decided to not explore further for this project as all forwarding requests need to be coded.
+ *  => Decided to not explore further for this project as all forwarding requests needs to be coded.
  * 
  *  => Additionally axios was useful for successul forwarding. 
  *      In that I could maybe do something more, but it didn't work "of the shelf" and got the below error.
+ *      The request is successfully sent to the backend & the response does send back data in body
+ *          => Maybe something here is the issue, checkout in another project.
  * 
  *  => Using angluar clients development server, as fallback for proxying requests
- *      => But running on EC2 asks for user input & will take ages to run, so not doing that
+ *      => But running on EC2 asks for user input so not doing that
  * 
  *  => I can however deploy this, use a shell script to update the backend ELB and access app over the web
- *      => Still have a frontend that:
+ *      => While the docker container will be big, I still have a frontend that:
  *          1. Is accessible over the web (ie makes use of cloud infrastructure)
  *          2. Can talk to the backend REST API
  *          3. Can be updated for using a valid X509 cert so that communications are encrypted
@@ -28,12 +30,11 @@ const
     https = require('http'),
     path = require('path'),
     express = require('express'),
-    httpProxy = require('http-proxy'),
     axios = require('axios'),
     proxyConf = require('./src/proxy-config.json'),
     fs = require('fs')
 ;
-
+// httpProxy = require('http-proxy')
 
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
@@ -71,11 +72,12 @@ router.use(express.json());
  */
 
 // Setup proxy
+//  Deployment version localhost = TEMPLATE_ELB_DNS
 const
-    apiProxy = httpProxy.createProxyServer(),
     backendHost = 'localhost',
-    apiForwardingUrl = 'http://' + backendHost + ':4200'
+    apiForwardingUrl = 'http://' + backendHost + ':8080'
 ;
+// apiProxy = httpProxy.createProxyServer();
 
 // Alternative
 const instance = axios.create();
