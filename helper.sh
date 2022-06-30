@@ -118,3 +118,18 @@ lite-server -c bs-config.json
 # Install modules: Tried these but too much at this stage
 #   => Just going to deploy via "ng serve"
 npm i -g express http-proxy axios
+
+
+################################
+# 
+# Generate Self-Signed Cert
+# 
+#   Bugging out now
+# 
+################################
+
+
+# Generate self-signed cert
+openssl genrsa -out key.pem
+openssl req -new -key key.pem -out csr.pem
+openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem

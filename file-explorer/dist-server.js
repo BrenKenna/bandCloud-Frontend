@@ -1,8 +1,23 @@
 /**
  * App to serve the SPA and proxy requests to backend resources
- *  => Decided to drop for this project as all forwarding requests need to be coded.
- *  => Additionally axios was useful for successul forwarding, but got the below.
- *  => Deployment serves an angular app, not the built distribution
+ *  => Decided to not explore further for this project as all forwarding requests need to be coded.
+ * 
+ *  => Additionally axios was useful for successul forwarding. 
+ *      In that I could maybe do something more, but it didn't work "of the shelf" and got the below error.
+ * 
+ *  => Using angluar clients development server, as fallback for proxying requests
+ *      => But running on EC2 asks for user input & will take ages to run, so not doing that
+ * 
+ *  => I can however deploy this, use a shell script to update the backend ELB and access app over the web
+ *      => Still have a frontend that:
+ *          1. Is accessible over the web (ie makes use of cloud infrastructure)
+ *          2. Can talk to the backend REST API
+ *          3. Can be updated for using a valid X509 cert so that communications are encrypted
+ *              => Self-signed certs causing issues that they weren't before.
+ *                  Ignoring it, but leaving the code in
+ * 
+ *          4. Can be further developed to proxy requests to backend resources, in a customizable manner
+ *          5. Have done everything I have set out to do :)
  * 
  * TypeError [ERR_INVALID_ARG_TYPE]: The "chunk" argument must be of type string or an instance of Buffer or Uint8Array. 
  *  Received an instance of Array
@@ -15,7 +30,8 @@ const
     express = require('express'),
     httpProxy = require('http-proxy'),
     axios = require('axios'),
-    proxyConf = require('./src/proxy-config.json')
+    proxyConf = require('./src/proxy-config.json'),
+    fs = require('fs')
 ;
 
 
@@ -27,8 +43,15 @@ const
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
 
+// Read ssl cert
+const options = {
+    key: fs.readFileSync('./certs/key.pem'),
+    cert: fs.readFileSync('./certs/cert.pem')
+};
+
 
 // Configure the web server
+// Provide the above for https server
 const
     router = express(),
     server = https.createServer(router)
@@ -51,7 +74,7 @@ router.use(express.json());
 const
     apiProxy = httpProxy.createProxyServer(),
     backendHost = 'localhost',
-    apiForwardingUrl = 'http://' + backendHost + ':8080'
+    apiForwardingUrl = 'http://' + backendHost + ':4200'
 ;
 
 // Alternative
@@ -107,7 +130,7 @@ router.all("/projects/listProjects", function(req, resp) {
 // Run server
 server.
     listen(
-        process.env.PORT || 4200,
+        process.env.PORT || 8080,
         process.env.IP || '0.0.0.0',
         () => {
 
