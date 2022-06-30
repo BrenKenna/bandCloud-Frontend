@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AudioContext } from 'angular-audio-context';
-import { defer, from, Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { BandCloudAudioService } from 'src/app/services/audio/band-cloud-audio.service';
 import { BandCloudRestProjectsService } from 'src/app/services/backend/band-cloud-rest-projects.service';
 import { ProjectModel } from '../model/project-model';
@@ -264,7 +264,7 @@ export class ProjectPageComponent implements OnInit {
    */
   private getAudio() {
     let subject = new Subject<AudioBuffer>();
-    this.http.get("assest/site_audio_acoustic.mp3", {"responseType": "arraybuffer"}).subscribe(
+    this.http.get("assests/site_audio_acoustic.mp3", {"responseType": "arraybuffer"}).subscribe(
       async (data) => {
         // console.log("\nRunning get audio");
         let audioBuffProm = await this.audioCtx.decodeAudioData(data);
