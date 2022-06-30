@@ -77,5 +77,44 @@ ng generate module projects/project-page --routing
 
 
 
+#######################################
+#######################################
+#
+# Serving notes
+#
+#######################################
+#######################################
+
+# Proxy config
+ls 'src/proxy-config.json'
+
+
 # Serve an app: http://localhost:4200
 ng serve
+
+
+# Build and serve with dev tool
+npm install --global lite-server # Above app
+ng build # At app level
+lite-server -c bs-config.json
+
+``
+- Serves nicely but does not proxy requests
+- Need to change some of the paths. Currently set with "assests/"
+    ls dist/file-explorer/assets/
+        site_audio_acoustic.mp3
+    22.06.30 11:27:45 404 GET /assest/site_audio_acoustic.mp3
+
+{
+    "injectChanges": false,
+    "files": [ "./**/*.{html,htm,css,js}" ],
+    "watchOptions": { "ignored": "node_modules" },
+    "port": 4200,
+    "server": { "baseDir": "./dist/file-explorer" }
+}
+
+``
+
+# Install modules: Tried these but too much at this stage
+#   => Just going to deploy via "ng serve"
+npm i -g express http-proxy axios

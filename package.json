@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@angular/flex-layout": "^13.0.0-beta.38",
-    "angular-audio-context": "^32.0.10"
+    "angular-audio-context": "^32.0.10",
+    "lite-server": "^2.6.1"
   }
 }

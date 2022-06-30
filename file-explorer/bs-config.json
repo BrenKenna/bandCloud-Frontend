@@ -1,0 +1,7 @@
+{
+    "injectChanges": false,
+    "files": [ "./**/*.{html,htm,css,js}" ],
+    "watchOptions": { "ignored": "node_modules" },
+    "port": 4200,
+    "server": { "baseDir": "./dist/file-explorer/" }
+}

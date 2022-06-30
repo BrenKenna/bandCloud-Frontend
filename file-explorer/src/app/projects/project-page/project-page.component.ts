@@ -264,7 +264,7 @@ export class ProjectPageComponent implements OnInit {
    */
   private getAudio() {
     let subject = new Subject<AudioBuffer>();
-    this.http.get("../../../assets/site_audio_acoustic.mp3", {"responseType": "arraybuffer"}).subscribe(
+    this.http.get("assest/site_audio_acoustic.mp3", {"responseType": "arraybuffer"}).subscribe(
       async (data) => {
         // console.log("\nRunning get audio");
         let audioBuffProm = await this.audioCtx.decodeAudioData(data);
