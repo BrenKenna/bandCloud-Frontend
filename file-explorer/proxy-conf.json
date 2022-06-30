@@ -1,0 +1,41 @@
+{
+    "/account/manage/register": {
+      "target": "http://localhost:8080",
+      "secure": false
+    },
+
+    "/account/manage/login": {
+        "target": "http://localhost:8080",
+        "secure": false
+    },
+
+    "/account/manage/deregister": {
+        "target": "http://localhost:8080",
+        "secure": false
+    },
+
+    "/account/display/view": {
+        "target": "http://localhost:8080",
+        "secure": false
+    },
+
+    "/account/display/update": {
+        "target": "http://localhost:8080",
+        "secure": false
+    },
+
+    "/projects/listProjects": {
+        "target": "http://localhost:8080",
+        "secure": false
+    },
+
+    "/projects/listProject": {
+        "target": "http://localhost:8080",
+        "secure": false
+    },
+
+    "/projects/post-recording": {
+        "target": "http://localhost:8080",
+        "secure": false
+    }
+}

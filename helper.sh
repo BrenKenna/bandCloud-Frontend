@@ -19,6 +19,10 @@
 # 
 #####################
 
+# Install from dependencies
+npm install
+
+
 # Install angular
 npm install --save -g @angular/cli
 
