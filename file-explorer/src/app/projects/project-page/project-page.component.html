@@ -77,13 +77,17 @@
         <li>
             <button mat-raised-button (click)="tracksGuitar()" color="primary">Fetch Guitar</button>
             <button mat-raised-button (click)="playFromTracks('guitar')" color="primary">Play Guitar</button>
+            <button mat-raised-button (click)="dropFromTracks('guitar')" color="primary">Drop Guitar</button>
         </li>
         <br>
         <li>
-            <button mat-raised-button (click)="tracksDrums()" color="primary">Fetch Drums</button>
-            <button mat-raised-button (click)="playFromTracks('drums')" color="primary">Play Drums</button>
+            <button mat-raised-button (click)="tracksDrums()" color="accent">Fetch Drums</button>
+            <button mat-raised-button (click)="playFromTracks('drums')" color="accent">Play Drums</button>
+            <button mat-raised-button (click)="dropFromTracks('drums')" color="accent">Drop Drums</button>
         </li>
     </ul>
+    <br>
+    <button mat-raised-button (click)="sortTracks()" color="warn">Sort Tracks</button>
 </mat-card>
 
 <!--

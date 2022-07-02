@@ -185,6 +185,7 @@ export class Tracks {
                 const holder = this.tracks[nextIter];
                 if( track.getTrackSize() > holder.getTrackSize() ) {
                     this.tracks[nextIter] = track;
+                    this.tracks[counter] = holder;
                     swap = true;
                 }
             }
@@ -263,6 +264,19 @@ export class Tracks {
 
             // Update tracks
             this.tracks = output;
+        }
+    }
+
+
+    /**
+     * Drop a track by their name
+     * 
+     * @param trackName 
+     */
+    public dropTrackByName(trackName: string) {
+        let track: Track = this.getTrackByName(trackName);
+        if ( track != null ) {
+            this.dropTrack(track);
         }
     }
 }

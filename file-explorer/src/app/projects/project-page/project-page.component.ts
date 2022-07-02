@@ -596,6 +596,14 @@ export class ProjectPageComponent implements OnInit {
   }
 
 
+
+  /**
+   * Method to play a track from tracks list
+   *  => Needs to be syncronized
+   * 
+   * @param trackName 
+   * @returns 
+   */
   public playFromTracks(trackName: string) {
 
     // Try fetch track
@@ -618,11 +626,30 @@ export class ProjectPageComponent implements OnInit {
     trackSource.onended = () => {
       track.setStop();
       trackSource.disconnect();
-      this.audioCtx.suspend();
+      this.audioCtx.suspend(); // None can stop
     };
 
     // Return true
     return true;
   }
 
+
+  /**
+   * Drop a track by their name
+   * 
+   * @param trackName 
+   */
+  public dropFromTracks(trackName: string) {
+    this.tracks.dropTrackByName(trackName);
+  }
+
+
+  /**
+   * Sort tracks ascendingly by size
+   */
+  public sortTracks() {
+    console.dir(this.tracks.getTrackNames());
+    this.tracks.bubbleSort();
+    console.dir(this.tracks.getTrackNames());
+  }
 }
