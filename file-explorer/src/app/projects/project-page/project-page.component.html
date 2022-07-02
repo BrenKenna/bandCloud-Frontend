@@ -42,7 +42,6 @@
     <button mat-raised-button (click)="mixTracks()" color="primary">Mix & Play</button>
 </mat-card>
 
-
 <br>
 <mat-divider></mat-divider>
 <br>
@@ -57,6 +56,35 @@
     <button mat-raised-button (click)="postTrack()" color="primary">Post Recording</button>
 </mat-card>
 
+<br>
+<mat-divider></mat-divider>
+<br>
+
+<mat-card>
+    <mat-card-title>Test Track Class</mat-card-title>
+    <button mat-raised-button (click)="fetchGuitar()">Fetch Guitar</button>
+    <button mat-raised-button (click)="playTrack(track)">Play Guitar</button>
+    <!--<button mat-raised-button (click)="fetchGuitar()">Fetch AND Play Guitar :)</button> -->
+</mat-card>
+
+<br>
+<mat-divider></mat-divider>
+<br>
+
+<mat-card>
+    <mat-card-title>Test Tracks Class</mat-card-title>
+    <ul>
+        <li>
+            <button mat-raised-button (click)="tracksGuitar()" color="primary">Fetch Guitar</button>
+            <button mat-raised-button (click)="playFromTracks('guitar')" color="primary">Play Guitar</button>
+        </li>
+        <br>
+        <li>
+            <button mat-raised-button (click)="tracksDrums()" color="primary">Fetch Drums</button>
+            <button mat-raised-button (click)="playFromTracks('drums')" color="primary">Play Drums</button>
+        </li>
+    </ul>
+</mat-card>
 
 <!--
 <mat-card>

@@ -8,6 +8,8 @@ import { ProjectModel } from '../model/project-model';
 
 import * as RecordRTC from 'recordrtc';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Track } from 'src/app/services/audio/models/services/audio/models/track';
+import { Tracks } from 'src/app/services/audio/models/services/audio/models/tracks';
 @Component({
   selector: 'app-project-page',
   templateUrl: './project-page.component.html',
@@ -43,6 +45,12 @@ export class ProjectPageComponent implements OnInit {
   // Button map
   public buttonMap: Map<string, boolean> = new Map();
   public mikeRecordURL: string;
+
+
+  // Track related
+  public track: Track;
+  public tracks: Tracks = new Tracks(); // Would three, 2 editable
+
 
   /**
    * 
@@ -264,7 +272,7 @@ export class ProjectPageComponent implements OnInit {
    */
   private getAudio() {
     let subject = new Subject<AudioBuffer>();
-    this.http.get("assests/site_audio_acoustic.mp3", {"responseType": "arraybuffer"}).subscribe(
+    this.http.get("../../../assets/site_audio_acoustic.mp3", {"responseType": "arraybuffer"}).subscribe(
       async (data) => {
         // console.log("\nRunning get audio");
         let audioBuffProm = await this.audioCtx.decodeAudioData(data);
@@ -524,4 +532,97 @@ export class ProjectPageComponent implements OnInit {
     }
     return true;
   }
+
+
+  /**
+   * Construct a track from local audio data
+   * 
+   */
+  public fetchGuitar() {
+
+    // Construct track from guitar
+    this.track = new Track(this.audioServ, {name: 'guitar', url: '../../../assets/site_audio_acoustic.mp3'} );
+    this.track.setAudioBuffer();
+  }
+
+
+  /**
+   * Handle playing it
+   */
+  public playTrack(track: Track) {
+
+    // Pass if playing
+    if ( track.getPlayingState() ) {
+      console.log("Nope playing it again, soz :)");
+      return false;
+    }
+    this.audioServ.manageState();
+
+    // Update playing state & configure audio node
+    track.setPlaying();
+    const trackSource = this.audioCtx.createBufferSource();
+    trackSource.buffer = track.getAudioBuffer();
+    trackSource.connect(this.audioCtx.destination);
+
+    // Logic for playing
+    trackSource.start();
+    trackSource.onended = () => {
+      track.setStop();
+      trackSource.disconnect();
+      this.audioCtx.suspend();
+    };
+
+    // Happy days
+    return true;
+  }
+
+
+  public tracksDrums() {
+
+    // Construct track from guitar
+    let track = new Track(this.audioServ, {name: 'drums', url: '../../../assets/site_audio_drums.mp3'} );
+    track.setAudioBuffer();
+    console.log(`\nAdded drums = ${this.tracks.addTrack(track)}`);
+  }
+
+
+
+  public tracksGuitar() {
+
+    // Construct track from guitar
+    let track = new Track(this.audioServ, {name: 'guitar', url: '../../../assets/site_audio_acoustic.mp3'} );
+    track.setAudioBuffer();
+    console.log(`\nAdded guitar = ${this.tracks.addTrack(track)}`);
+  }
+
+
+  public playFromTracks(trackName: string) {
+
+    // Try fetch track
+    console.dir(this.tracks);
+    let track = this.tracks.getTrackByName(trackName);
+    if( track == null ) {
+      console.log(`\nError, track '${trackName}' not found`);
+      return false;
+    }
+    this.audioServ.manageState();
+    
+    // Update playing state & configure audio node
+    track.setPlaying();
+    const trackSource = this.audioCtx.createBufferSource();
+    trackSource.buffer = track.getAudioBuffer();
+    trackSource.connect(this.audioCtx.destination);
+
+    // Logic for playing
+    trackSource.start();
+    trackSource.onended = () => {
+      track.setStop();
+      trackSource.disconnect();
+      this.audioCtx.suspend();
+    };
+
+    // Return true
+    return true;
+  }
+
 }

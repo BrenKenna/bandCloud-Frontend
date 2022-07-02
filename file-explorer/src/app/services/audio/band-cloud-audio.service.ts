@@ -1,8 +1,22 @@
+
+// Core modules
 import { Injectable } from '@angular/core';
 import { AudioContext } from 'angular-audio-context';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Track } from './models/services/audio/models/track';
 
+
+// App related
+
+
+/**
+ * Class to encapsulate interacting with MDN Web Audio for app specific things.
+ *  Trying to keep it high level, which means a lot thought + work in figuring
+ *   out encapsulating reptitive tasks + their models & how data/logic is exchanged
+ *   between them :(
+ * 
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -80,13 +94,15 @@ export class BandCloudAudioService {
   public getAudio(urlStr: string) {
 
     //
-    // "../../../assets/site_audio_acoustic.mp3"
+    console.log("\nGet audio started");
     let subject = new Subject<AudioBuffer>();
     this.http.get(urlStr, {"responseType": "arraybuffer"}).subscribe(
       async (data) => {
         let audioBuffProm = await this.audioCtx.decodeAudioData(data);
+        console.log(`\nI got this back ${audioBuffProm}`);
         subject.next(audioBuffProm);
     });
+    console.log(`\nAnd I will return this ${subject}`);
     return subject.asObservable();
   }
 
@@ -232,4 +248,54 @@ export class BandCloudAudioService {
     // Return distortion curve
     return curve;
   };
+
+
+
+  /**
+   * Handle playing a track
+   * 
+   *  Code runs fine but track does not play
+   *    Things look to be order, so hard to figure out
+   *      Maybe it should return it and the page standardizes logic.
+   * 
+   *  Thinking that a promise should be returned, because doesn't work
+   *   on page in one button but does in two
+   * 
+   * @param track 
+   * @returns 
+   */
+  public playTrack(track: Track) {
+    
+    // Manage context + track state
+    if( track.getPlayingState() ) {
+      console.log(`\nError, track '${track.getName()}' is already playing`);
+      return false;
+    }
+    this.manageState();
+    console.log(this.audioCtx.state);
+    // console.dir(track); // Is fine here
+
+    // Update playing state & configure audio node
+    console.log(`\nConfiguring track '${track.getName()}' to play`);
+    track.setPlaying();
+    const trackSource = this.audioCtx.createBufferSource();
+    trackSource.buffer = track.getAudioBuffer();
+    trackSource.connect(this.audioCtx.destination);
+
+    // Logic for playing
+    console.log("\nPlaying track");
+    trackSource.start();
+    // console.dir(trackSource); // Looks ok
+    trackSource.onended =
+      () => {
+        track.setStop();
+        trackSource.disconnect();
+        // this.audioCtx.suspend(); // Want to work this in more
+        console.log(`Track '${track.getName()}' is finished playing`);
+      };
+
+    // Return operation state
+    console.log("Done");
+    return true;
+  }
 }
