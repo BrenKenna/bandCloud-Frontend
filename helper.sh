@@ -80,6 +80,11 @@ ng generate component projects/project-page
 ng generate module projects/project-page --routing
 
 
+# Generate models to support audio interactions
+mkdir services/audio/models
+ng generate class services/audio/models/track
+ng generate class services/audio/models/tracks
+
 
 #######################################
 #######################################

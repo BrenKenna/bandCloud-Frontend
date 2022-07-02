@@ -260,7 +260,7 @@ export class ProjectPageComponent implements OnInit {
   /**
    * Return an observable for an audio buffer from get request
    * 
-   * @returns 
+   * @returns Oberservable-AudioBuffer
    */
   private getAudio() {
     let subject = new Subject<AudioBuffer>();
