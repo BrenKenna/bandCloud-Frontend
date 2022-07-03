@@ -52,6 +52,7 @@ export class ProjectPageComponent implements OnInit {
   public track: Track;
   public tracks: Tracks = new Tracks(); // Would three, 2 editable
   public mockMeta = MOCK_META;
+  public mixedTrack: Track;
 
 
   /**
@@ -537,18 +538,6 @@ export class ProjectPageComponent implements OnInit {
 
 
   /**
-   * Construct a track from local audio data
-   * 
-   */
-  public fetchGuitar() {
-
-    // Construct track from guitar
-    this.track = new Track(this.audioServ, {name: 'guitar', url: '../../../assets/site_audio_acoustic.mp3'} );
-    this.track.setAudioBuffer();
-  }
-
-
-  /**
    * Handle playing it
    */
   public playTrack(track: Track) {
@@ -576,25 +565,6 @@ export class ProjectPageComponent implements OnInit {
 
     // Happy days
     return true;
-  }
-
-
-  public tracksDrums() {
-
-    // Construct track from guitar
-    let track = new Track(this.audioServ, {name: 'drums', url: '../../../assets/site_audio_drums.mp3'} );
-    track.setAudioBuffer();
-    console.log(`\nAdded drums = ${this.tracks.addTrack(track)}`);
-  }
-
-
-
-  public tracksGuitar() {
-
-    // Construct track from guitar
-    let track = new Track(this.audioServ, {name: 'guitar', url: '../../../assets/site_audio_acoustic.mp3'} );
-    track.setAudioBuffer();
-    console.log(`\nAdded guitar = ${this.tracks.addTrack(track)}`);
   }
 
 
@@ -702,5 +672,42 @@ export class ProjectPageComponent implements OnInit {
 
     // Return true
     return true;
+  }
+
+
+  /**
+   * Method to mix all tracks in tracks.
+   *  Sets the this.mixedTrack attribute
+   * 
+   * @param tracks 
+   * @returns 
+   */
+  public tracksMixer(tracks: Tracks) {
+    
+    // Get mixed audio signal
+    let mix: Float32Array = this.tracks.mixTracks();
+    console.log(`I just an array of size = ${mix.length}`);
+
+    // Create buffer based on largest track & copy data into channels
+    let buffer = this.audioCtx.createBuffer(2, mix.length, this.tracks.getLargest().getTrackData().samplingRate);
+    buffer.copyToChannel(mix, 0);
+    buffer.copyToChannel(mix, 1);
+
+    // Connect & play
+    this.audioServ.manageState();
+    const trackSource = this.audioCtx.createBufferSource();
+    trackSource.buffer = buffer;
+    trackSource.connect(this.audioCtx.destination);
+    trackSource.start();
+
+    // Handle on ended
+    trackSource.onended = () => {
+      trackSource.disconnect();
+      this.audioCtx.suspend(); // None can stop
+    };
+
+    // Log object
+    console.dir(buffer);
+    console.dir(trackSource);
   }
 }

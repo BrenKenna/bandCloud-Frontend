@@ -17,11 +17,9 @@
 
 
 // Modules to support track
-import { HttpClient, HttpHandler  } from "@angular/common/http";
 import { IAudioContext } from "angular-audio-context";
-import { Subject } from "rxjs";
 import { BandCloudAudioService } from "src/app/services/audio/band-cloud-audio.service";
-
+import { Subject } from "rxjs"; // Should be considered for later
 
 /**
  * Interface to support constructing track

@@ -10,6 +10,7 @@ export class Tracks {
     // Attributes
     private tracks: Track[] = [];
     public offset: number = 0;
+    public mixedTrack: Track;
 
     /**
      * Empty to constructor because a track can be added/dropped
@@ -25,6 +26,64 @@ export class Tracks {
         return this.tracks;
     }
 
+
+    /**
+     * Get the mixed track
+     * 
+     * @returns 
+     */
+    public getMix() {
+        return this.mixedTrack;
+    }
+
+
+    /**
+     * Internal method to handle mixing process
+     * 
+     * @returns Float32Array
+     */
+    public mixTracks() {
+
+        // Sort tracks ascendingly
+        let
+            audioData = [],
+            output
+        ;
+        this.bubbleSort();
+
+        // Add each audio signal to output
+        let trackIter = 0, sum = 0;
+        for ( let track of this.getTracks() ) {
+
+            // Either push and add the data
+            let elmIter = 0;
+            for( const elm of track.getAudioBuffer().getChannelData(0) ) {
+
+                // Push if first track
+                if(trackIter == 0) {
+                    audioData.push(elm);
+                }
+
+                // Add if second
+                else {
+                    audioData[elmIter] = (elm + audioData[elmIter]);
+                    elmIter++;
+                }
+
+                // Add to running sum for sanity checking
+                sum += elm;
+            }
+
+            // Increment track
+            trackIter++;
+        }
+
+        // Return output
+        output = new Float32Array(audioData);
+        console.dir(output);
+        console.log(`Output array size = ${output.length}, Audio Signal Sum = ${sum}`);
+        return output;
+    }
 
     /**
      * Get offset for multi-track playing
@@ -315,4 +374,24 @@ export class Tracks {
             this.dropTrack(track);
         }
     }
+
+
+    /**
+     * Fetch largest track
+     * 
+     * @returns Track
+     */
+    public getLargest() {
+        this.bubbleSort();
+        return this.tracks[ this.tracks.length -1 ];
+    }
+
+
+    /**
+     * Fetch the track data of largest track
+     * 
+     */
+    public getLargest_TrackData () {
+        this.getLargest().getTrackData();
+    } 
 }

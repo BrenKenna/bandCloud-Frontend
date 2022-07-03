@@ -1,14 +1,4 @@
-<mat-card>
-    <mat-card-title>Audio Testing</mat-card-title>
-    <mat-card-content>
-        <button mat-raised-button (click)="whiteNoiseGen('whiteNoise1')" color="primary">White Noise-1</button>
-        <button mat-raised-button (click)="whiteNoiseGen('whiteNoise2')" color="accent">White Noise-2</button>
-    </mat-card-content>
-</mat-card>
-<br>
-<mat-divider></mat-divider>
-<br>
-
+<!-- 
 <mat-card>
     <mat-card-title>Recording & OGG Export</mat-card-title>
     <mat-card-content>
@@ -16,35 +6,12 @@
         <button mat-raised-button (click)="playRecording()" color="accent">Play Record</button>
         <button mat-raised-button (click)="postRecording()" color="primary">Post Recording</button>
         <button mat-raised-button (click)="playFetchedAudio()" color="warn">Fetch Audio</button>
-        <br>
-        <!--
-            <audio 
-                [src]="whiteNoiseBlob_URL" 
-                controls>
-            </audio>
-            <mat-divider></mat-divider>
-            <br>
-            
-        -->
     </mat-card-content>
 </mat-card>
 <br>
 <mat-divider></mat-divider>
 <br>
-
-<mat-card>
-    <mat-card-title>Mix Audio</mat-card-title>
-   <!--
-    <button mat-raised-button (click)="mixAudio()">whiteNoise-1</button>
-    <button mat-raised-button (click)="mixAudio()">whiteNoise-2</button>
-   -->
-    <button mat-raised-button (click)="multiTrackPlay()" color="primary">MultiTrack Play</button>
-    <button mat-raised-button (click)="mixTracks()" color="primary">Mix & Play</button>
-</mat-card>
-
-<br>
-<mat-divider></mat-divider>
-<br>
+-->
 
 <mat-card>
     <mat-card-title>Record Audio</mat-card-title>
@@ -61,25 +28,6 @@
 <br>
 
 <mat-card>
-    <mat-card-title>Test Track Class</mat-card-title>
-    <button mat-raised-button (click)="fetchGuitar()">Fetch Guitar</button>
-    <button mat-raised-button (click)="playTrack(track)">Play Guitar</button>
-    <!--<button mat-raised-button (click)="fetchGuitar()">Fetch AND Play Guitar :)</button> -->
-</mat-card>
-
-<br>
-<mat-divider></mat-divider>
-<br>
-
-<!--
-            <button mat-raised-button (click)="tracksDrums()" color="accent">Fetch Drums</button>
-            <button mat-raised-button (click)="playFromTracks('drums')" color="accent">Play Drums</button>
-            <button mat-raised-button (click)="dropFromTracks('drums')" color="accent">Drop Drums</button>
-
-    fetchTrack(trackName: string, trackURL: string)
--->
-
-<mat-card>
     <mat-card-title>Test Tracks Class: Raw Audio Getter, Player + Sync-Play</mat-card-title>
     <ul>
         <li *ngFor="let meta of mockMeta">
@@ -91,8 +39,19 @@
         </li>
     </ul>
     <br>
-    <button mat-raised-button (click)="sortTracks()" color="warn">Sort Tracks</button>
+    <button mat-raised-button (click)="sortTracks()" color="accent">Sort Tracks</button>
+    <button mat-raised-button (click)="tracksMixer(tracks)" color="warn">Mix Tracks</button>
 </mat-card>
+
+<br>
+<mat-divider></mat-divider>
+<br>
+
+<!-- I want to be able to put the mixed track here -->
+<h4>Figure Out Mixed Track Here: Audio Source with Controls </h4>
+<audio controls="" *ngIf="mikeRecordURL">
+    <source [src]="sanitize(mikeRecordURL)" type="audio/wav">
+</audio>
 
 <!--
 <mat-card>
