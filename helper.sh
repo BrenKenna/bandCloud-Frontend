@@ -85,6 +85,7 @@ mkdir services/audio/models
 ng generate class services/audio/models/track
 ng generate class services/audio/models/tracks
 
+ng generate class projects/model/mock-data/mock-data
 
 #######################################
 #######################################

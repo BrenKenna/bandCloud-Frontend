@@ -71,19 +71,23 @@
 <mat-divider></mat-divider>
 <br>
 
-<mat-card>
-    <mat-card-title>Test Tracks Class</mat-card-title>
-    <ul>
-        <li>
-            <button mat-raised-button (click)="tracksGuitar()" color="primary">Fetch Guitar</button>
-            <button mat-raised-button (click)="playFromTracks('guitar')" color="primary">Play Guitar</button>
-            <button mat-raised-button (click)="dropFromTracks('guitar')" color="primary">Drop Guitar</button>
-        </li>
-        <br>
-        <li>
+<!--
             <button mat-raised-button (click)="tracksDrums()" color="accent">Fetch Drums</button>
             <button mat-raised-button (click)="playFromTracks('drums')" color="accent">Play Drums</button>
             <button mat-raised-button (click)="dropFromTracks('drums')" color="accent">Drop Drums</button>
+
+    fetchTrack(trackName: string, trackURL: string)
+-->
+
+<mat-card>
+    <mat-card-title>Test Tracks Class: Raw Audio Getter & Player</mat-card-title>
+    <ul>
+        <li *ngFor="let meta of mockMeta">
+            <p>Track Name: {{ meta.name }}</p>
+            <button mat-raised-button (click)="fetchTrack(meta.name, meta.path)" color="primary">Fetch Track</button>
+            <button mat-raised-button (click)="playFromTracks(meta.name)" color="accent">Play Track</button>
+            <button mat-raised-button (click)="dropFromTracks(meta.name)" color="warn">Drop Track</button>
+            <button mat-raised-button (click)="tracks_MultiPlay(meta.name)" color="primary">Sync Play</button>
         </li>
     </ul>
     <br>

@@ -9,6 +9,7 @@ export class Tracks {
 
     // Attributes
     private tracks: Track[] = [];
+    public offset: number = 0;
 
     /**
      * Empty to constructor because a track can be added/dropped
@@ -24,6 +25,41 @@ export class Tracks {
         return this.tracks;
     }
 
+
+    /**
+     * Get offset for multi-track playing
+     * 
+     * @returns - number
+     */
+    public getOffset() {
+        return this.offset;
+    }
+
+
+    /**
+     * Update offset based on time from audio-context
+     * 
+     * @param currentTime 
+     */
+    public setOffset(currentTime: number) {
+        this.offset = currentTime;
+    }
+
+
+    /**
+     * Method to handle syncronizing play time, at 0 or however long now
+     *  - Offset equally 0
+     * 
+     * @param currentTime 
+     * @returns 
+     */
+    public getSyncedTime(currentTime: number) {
+        if( this.offset == 0) {
+            this.offset = currentTime;
+            return 0;
+        }
+        return ( currentTime - this.offset );
+    }
 
     /**
      * Return list of track names

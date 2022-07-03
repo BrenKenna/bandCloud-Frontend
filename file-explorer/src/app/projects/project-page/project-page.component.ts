@@ -10,6 +10,7 @@ import * as RecordRTC from 'recordrtc';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Track } from 'src/app/services/audio/models/services/audio/models/track';
 import { Tracks } from 'src/app/services/audio/models/services/audio/models/tracks';
+import { MOCK_META } from '../model/mock-data/mock-meta';
 @Component({
   selector: 'app-project-page',
   templateUrl: './project-page.component.html',
@@ -50,6 +51,7 @@ export class ProjectPageComponent implements OnInit {
   // Track related
   public track: Track;
   public tracks: Tracks = new Tracks(); // Would three, 2 editable
+  public mockMeta = MOCK_META;
 
 
   /**
@@ -596,6 +598,18 @@ export class ProjectPageComponent implements OnInit {
   }
 
 
+  /**
+   * Fetch and add track
+   * 
+   * @param trackName 
+   * @param trackURL 
+   */
+  public fetchTrack(trackName: string, trackURL: string) {
+    let track = new Track(this.audioServ, {name: trackName, url: trackURL} );
+    track.setAudioBuffer();
+    console.log(`\nAdded '${track.getName()}' = ${this.tracks.addTrack(track)}`);
+  }
+
 
   /**
    * Method to play a track from tracks list
@@ -651,5 +665,42 @@ export class ProjectPageComponent implements OnInit {
     console.dir(this.tracks.getTrackNames());
     this.tracks.bubbleSort();
     console.dir(this.tracks.getTrackNames());
+  }
+
+
+  /**
+   * Method to syncronize playing multiple tracks
+   * 
+   * @param trackName 
+   * @returns 
+   */
+  public tracks_MultiPlay(trackName: string) {
+
+    // Try fetch track
+    console.dir(this.tracks);
+    let track = this.tracks.getTrackByName(trackName);
+    if( track == null ) {
+      console.log(`\nError, track '${trackName}' not found`);
+      return false;
+    }
+    this.audioServ.manageState();
+    
+    // Update playing state & configure audio node
+    track.setPlaying();
+    const trackSource = this.audioCtx.createBufferSource();
+    trackSource.buffer = track.getAudioBuffer();
+    trackSource.connect(this.audioCtx.destination);
+
+    // Logic for playing
+    let whereInTrack = this.tracks.getSyncedTime(this.audioCtx.currentTime);
+    trackSource.start(0, whereInTrack);
+    trackSource.onended = () => {
+      track.setStop();
+      trackSource.disconnect();
+      this.audioCtx.suspend(); // None can stop
+    };
+
+    // Return true
+    return true;
   }
 }
