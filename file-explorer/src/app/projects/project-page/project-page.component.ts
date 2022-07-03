@@ -64,9 +64,21 @@ export class ProjectPageComponent implements OnInit {
     );
   }
 
+  /**
+   * Fetch and add track
+   * 
+   * @param trackName 
+   * @param trackURL 
+   */
+   public fetchTrack(trackName: string, trackURL: string) {
+    let track = new Track(this.audioServ, {name: trackName, url: trackURL} );
+    track.setAudioBuffer();
+    console.log(`\nAdded '${track.getName()}' = ${this.tracks.addTrack(track)}`);
+  }
+
 
   /**
-   * Handle playing it
+   * Handle playing track
    */
    public playTrack(track: Track) {
 
@@ -93,19 +105,6 @@ export class ProjectPageComponent implements OnInit {
 
     // Happy days
     return true;
-  }
-
-
-  /**
-   * Fetch and add track
-   * 
-   * @param trackName 
-   * @param trackURL 
-   */
-  public fetchTrack(trackName: string, trackURL: string) {
-    let track = new Track(this.audioServ, {name: trackName, url: trackURL} );
-    track.setAudioBuffer();
-    console.log(`\nAdded '${track.getName()}' = ${this.tracks.addTrack(track)}`);
   }
 
 
@@ -242,7 +241,13 @@ export class ProjectPageComponent implements OnInit {
 
   /**
    * 
-   * Part to figure out next
+   * Last bits
+   * 
+   * Manage recording (ie Recording -> Track)
+   *          +
+   * Track/Audio-Buffer -> Blob
+   *          +
+   * Mixed audio -> Track
    * 
    */
 
@@ -306,7 +311,6 @@ export class ProjectPageComponent implements OnInit {
   public sanitize(url: string) {
     return this.domSanitizer.bypassSecurityTrustUrl(url);
   }
-
 
 
   /**
