@@ -18,7 +18,7 @@ export class BandCloudRestAccountService {
   };
 
   // Attribute to hold endpoints etc
-  private _rootPath = "http://localhost:4200";
+  private _rootPath = "http://bandcloudapp.com:8080";
   private _paths = {
     "account": {
 

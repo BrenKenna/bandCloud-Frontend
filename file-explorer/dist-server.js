@@ -74,7 +74,7 @@ router.use(express.json());
 // Setup proxy
 //  Deployment version localhost = TEMPLATE_ELB_DNS
 const
-    backendHost = 'localhost',
+    backendHost = 'resource.bandcloud.com',
     apiForwardingUrl = 'http://' + backendHost + ':8080'
 ;
 // apiProxy = httpProxy.createProxyServer();
