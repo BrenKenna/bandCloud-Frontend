@@ -6,6 +6,9 @@
  *      In that I could maybe do something more, but it didn't work "of the shelf" and got the below error.
  *      The request is successfully sent to the backend & the response does send back data in body
  *          => Maybe something here is the issue, checkout in another project.
+ *          => Problem was incorrect handling of the backend response
+ *          => Having the application hosted + private domain helped narrow down problem
+ *          => Outstanding issues here are handling of login response as cookie
  * 
  *  => Using angluar clients development server, as fallback for proxying requests
  *      => But running on EC2 asks for user input so not doing that
@@ -23,6 +26,12 @@
  * 
  * TypeError [ERR_INVALID_ARG_TYPE]: The "chunk" argument must be of type string or an instance of Buffer or Uint8Array. 
  *  Received an instance of Array
+ * 
+ * 
+ * blackSabbath
+ * sabbath@sabbath-band.com
+ * A30£f6^2$cE4-a?bf4
+ * 
  */
 
 // Import required modules
@@ -72,25 +81,90 @@ router.use(express.json());
  */
 
 // Setup proxy
-//  Deployment version localhost = TEMPLATE_ELB_DNS
+const instance = axios.create();
 const
     backendHost = 'resource.bandcloud.com',
     apiForwardingUrl = 'http://' + backendHost + ':8080'
 ;
 // apiProxy = httpProxy.createProxyServer();
 
-// Alternative
-const instance = axios.create();
 
-// 
-// Acknowledged but nothing happens leaving it out
-// 
+/**
+ * Configure accounts-manage proxy paths
+*/
+
+// Registration: 
+router.all("/account/manage/register", function(req, resp) {
+
+    // Serve back json
+    console.log(`\n\nA request came in for: ${req.url}`);
+    console.dir(req, {depth: null});
+    resp.writeHead(200, {'Content-Type': 'application/json'});
+
+    // Fetch promise for the auth page
+    let data = instance.post(`${apiForwardingUrl}/account/manage/register`);
+    
+    // Resolve promise
+    data.then( function(res) {
+        resp.end(res.data);
+    })
+    .catch( (error) => {
+        console.log(error);
+    });
+});
+
+
+// Login
+router.all("/account/manage/login", function(req, resp) {
+
+    // Serve back json
+    console.log(`A request came in for: ${req.url}`);
+    console.dir(req, {depth: null});
+    resp.writeHead(200, {'Content-Type': 'application/json'});
+
+    // Fetch promise for the auth page
+    let data = instance.post(`${apiForwardingUrl}/account/manage/login`);
+    
+    // Resolve promise
+    data.then( function(res) {
+        resp.end(res.data);
+    })
+    .catch( (error) => {
+        console.log(error);
+    });
+});
+
+
+// Deregister
+router.all("/account/manage/deregister", function(req, resp) {
+
+    // Serve back json
+    console.log(`A request came in for: ${req.url}`);
+    resp.writeHead(200, {'Content-Type': 'application/json'});
+
+    // Fetch promise for the auth page
+    let data = instance.post(`${apiForwardingUrl}/account/manage/deregister`);
+    
+    // Resolve promise
+    data.then( function(res) {
+        resp.end(res.data);
+    })
+    .catch( (error) => {
+        console.log(error);
+    });
+});
+
+
+/**
+ * Configure projects proxy paths
+*/
+
 
 // Define proxy paths
 router.all("/projects/listProject", function(req, resp) {
 
     // Serve back json
-    console.log(`A request came in for: ${req.url}`);
+    console.log(`\n\nA request came in for: ${req.url}`);
     resp.writeHead(200, {'Content-Type': 'application/json'});
 
     // Fetch promise for the auth page
@@ -98,7 +172,10 @@ router.all("/projects/listProject", function(req, resp) {
     
     // Resolve promise
     data.then( function(res) {
-        resp.end(res.data);
+        resp.end(JSON.stringify(res.data));
+    })
+    .catch( (error) => {
+        console.log(error);
     });
 });
 
@@ -107,7 +184,7 @@ router.all("/projects/listProject", function(req, resp) {
 router.all("/projects/listProjects", function(req, resp) {
 
     // Serve back json
-    console.log(`A request came in for: ${req.url}`);
+    console.log(`\n\nA request came in for: ${req.url}`);
     resp.writeHead(200, {'Content-Type': 'application/json'});
 
     // Fetch promise for the auth page
@@ -115,7 +192,30 @@ router.all("/projects/listProjects", function(req, resp) {
     
     // Resolve promise
     data.then( function(res) {
+        resp.end(JSON.stringify(res.data));
+    })
+    .catch( (error) => {
+        console.log(error);
+    });
+});
+
+
+// Post recording
+router.all("/projects/post-recording", function(req, resp) {
+
+    // Serve back json
+    console.log(`A request came in for: ${req.url}`);
+    resp.writeHead(200, {'Content-Type': 'application/json'});
+
+    // Fetch promise for the auth page
+    let data = instance.get(`${apiForwardingUrl}/projects/post-recording`);
+    
+    // Resolve promise
+    data.then( function(res) {
         resp.end(res.data);
+    })
+    .catch( (error) => {
+        console.log(error);
     });
 });
 
