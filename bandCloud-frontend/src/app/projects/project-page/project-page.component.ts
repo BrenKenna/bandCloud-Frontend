@@ -35,6 +35,12 @@ export class ProjectPageComponent implements OnInit {
   public mockMeta = MOCK_META;
   public mixedTrack: Track;
 
+
+  // Set mixed track properties
+  public mixedBlob: Blob;
+  public mixedURL: string;
+
+
   /**
    * 
    * @param bandServ 
@@ -124,6 +130,12 @@ export class ProjectPageComponent implements OnInit {
       console.log(`\nError, track '${trackName}' not found`);
       return false;
     }
+
+    // Manage playing state
+    if ( track.getPlayingState() ) {
+      console.log(`\nError, track '${track.getName()}' already playing`);
+      return false;
+    }
     this.audioServ.manageState();
     
     // Update playing state & configure audio node
@@ -180,6 +192,12 @@ export class ProjectPageComponent implements OnInit {
       console.log(`\nError, track '${trackName}' not found`);
       return false;
     }
+    
+    // Manage playing state
+    if ( track.getPlayingState() ) {
+      console.log(`\nError, track '${track.getName()}' already playing`);
+      return false;
+    }
     this.audioServ.manageState();
     
     // Update playing state & configure audio node
@@ -225,7 +243,7 @@ export class ProjectPageComponent implements OnInit {
     const trackSource = this.audioCtx.createBufferSource();
     trackSource.buffer = buffer;
     trackSource.connect(this.audioCtx.destination);
-    trackSource.start();
+    //trackSource.start();
 
     // Handle on ended
     trackSource.onended = () => {
@@ -233,9 +251,48 @@ export class ProjectPageComponent implements OnInit {
       this.audioCtx.suspend(); // None can stop
     };
 
-    // Log object
-    console.dir(buffer);
-    console.dir(trackSource);
+    // Convert to blob
+    const mixBlob = this.bufferSourceToBlog(trackSource.buffer);
+    this.mixedBlob = mixBlob.blob;
+    this.mixedURL = mixBlob.url;
+    console.dir(this.mixedBlob);
+    // console.log(this.mixedURL);
+
+    // Convert to track
+    let sanitURL = this.sanitize(this.mixedURL);
+    this.mixedTrack = new Track(this.audioServ, {name: 'mixedTrack', url: this.mixedURL});
+    this.mixedTrack.setAudioFromBlob(this.mixedBlob);
+    console.dir(this.mixedTrack);
+  }
+
+
+
+  /**
+   * Convert buffer array to blob and its url
+   * 
+   * @param bufferArray 
+   * @returns { 'blob': Blob, 'url': Blob-URL }
+   */
+  private bufferSourceToBlog(audioBuffer: AudioBuffer ) {
+
+
+    // interleaved
+    const [leftChan, rightChan] = [audioBuffer.getChannelData(0), audioBuffer.getChannelData(1)]
+    const interleaved = new Float32Array(leftChan.length + rightChan.length)
+    for (let src = 0, dst = 0; src < leftChan.length; src++, dst += 2) {
+      interleaved[dst] = leftChan[src]
+      interleaved[dst + 1] = rightChan[src];
+    }
+
+    // get WAV file bytes and audio params of your audio source
+    const wavBytes = this.audioServ.getWavBytes(interleaved.buffer, {
+      isFloat: true,       // floating point or 16-bit integer
+      numChannels: 2,
+      sampleRate: audioBuffer.sampleRate,
+    })
+    const wavBuffer = new Blob([wavBytes], { type: 'audio/wav' })
+    let blobURL = URL.createObjectURL(wavBuffer);
+    return {'blob': wavBuffer, 'url': blobURL};
   }
 
 

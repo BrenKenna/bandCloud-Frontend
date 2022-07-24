@@ -26,7 +26,7 @@ import { Subject } from "rxjs"; // Should be considered for later
  */
 interface TrackInterface {
     name: string;
-    url: string;
+    url: any;
 };
 
 
@@ -206,10 +206,29 @@ export class Track {
                 this.trackData.frameCount = data.length;
                 this.trackData.nChannels = data.numberOfChannels;
                 this.trackData.samplingRate = data.sampleRate;
-                this.trackData.trackDuration = data.duration
+                this.trackData.trackDuration = data.duration;
         });
     }
 
+
+    /**
+     * Use the audio service to fetch an audio buffer for this track from a blob
+     *  and note that it is loaded
+     */
+    public setAudioFromBlob(blob: Blob) {
+        this.audioServ.getAudioFromBlob(blob).subscribe(
+            (data) => {
+                // Update audio buffer
+                this.audioBuffer = data;
+                this.isLoaded = true;
+
+                // Update track metadata
+                this.trackData.frameCount = data.length;
+                this.trackData.nChannels = data.numberOfChannels;
+                this.trackData.samplingRate = data.sampleRate;
+                this.trackData.trackDuration = data.duration;
+        });
+    }
 
     /**
      * Get current playing state

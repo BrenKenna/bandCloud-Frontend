@@ -47,11 +47,13 @@
 <mat-divider></mat-divider>
 <br>
 
-<!-- I want to be able to put the mixed track here -->
-<h4>Figure Out Mixed Track Here: Audio Source with Controls </h4>
-<audio controls="" *ngIf="mikeRecordURL">
-    <source [src]="sanitize(mikeRecordURL)" type="audio/wav">
-</audio>
+<mat-card>
+    <mat-card-title>Test Playing a Mixed Track</mat-card-title>
+    <h4>Figure Out Mixed Track Here: Audio Source with Controls </h4>
+    <audio controls="" *ngIf="mixedURL">
+        <source [src]="sanitize(mixedURL)" type="audio/wav">
+    </audio>
+</mat-card>
 
 <!--
 <mat-card>
