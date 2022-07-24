@@ -53,6 +53,7 @@
     <audio controls="" *ngIf="mixedURL">
         <source [src]="sanitize(mixedURL)" type="audio/wav">
     </audio>
+    <button mat-raised-button color="accent" (click)="playMixedTrack()">Reload & Play mix</button>
 </mat-card>
 
 <!--

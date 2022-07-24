@@ -296,6 +296,20 @@ export class ProjectPageComponent implements OnInit {
   }
 
 
+
+  /**
+   * Play the active mixed track
+   * 
+   * @returns 
+   */
+  public playMixedTrack() {
+    if( this.mixedTrack == null ) {
+      console.log(`Error, mixed track does not exist`);
+      return false;
+    }
+    return this.playTrack(this.mixedTrack);
+  }
+
   /**
    * 
    * Last bits
