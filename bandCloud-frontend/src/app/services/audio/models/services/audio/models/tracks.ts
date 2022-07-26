@@ -408,10 +408,19 @@ export class Tracks {
 
 
     /**
+     * Set mixed track
+     * 
+     * @param mix 
+     */
+    public setMixedTrack(mix: Track) {
+        this.mixedTrack = mix;
+    }
+
+    /**
      * Fetch the track data of largest track
      * 
      */
     public getLargest_TrackData () {
         this.getLargest().getTrackData();
-    } 
+    }     
 }

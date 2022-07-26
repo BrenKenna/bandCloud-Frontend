@@ -155,7 +155,7 @@ export class ProjectPageComponent implements OnInit {
     buffer.copyToChannel(mix, 1);
 
     // Connect & play
-    this.audioServ.manageState();
+    /*this.audioServ.manageState();
     const trackSource = this.audioCtx.createBufferSource();
     trackSource.buffer = buffer;
     trackSource.connect(this.audioCtx.destination);
@@ -166,9 +166,10 @@ export class ProjectPageComponent implements OnInit {
       trackSource.disconnect();
       this.audioCtx.suspend(); // None can stop
     };
+    */
 
     // Convert to blob
-    const mixBlob = this.bufferSourceToBlog(trackSource.buffer);
+    const mixBlob = this.bufferSourceToBlog(buffer);
     this.mixedBlob = mixBlob.blob;
     this.mixedURL = mixBlob.url;
     console.dir(this.mixedBlob);
@@ -189,7 +190,7 @@ export class ProjectPageComponent implements OnInit {
    * @param bufferArray 
    * @returns { 'blob': Blob, 'url': Blob-URL }
    */
-  private bufferSourceToBlog(audioBuffer: AudioBuffer ) {
+  private bufferSourceToBlog(audioBuffer: AudioBuffer) {
 
 
     // interleaved
@@ -256,7 +257,7 @@ export class ProjectPageComponent implements OnInit {
     if ( this.recordingTracks.tracks.length > 0 ) {
       console.log(`Sync playing all recorded tracks`);
       for( let track of this.recordingTracks.getTracks() ) {
-        this.playTrackGeneral(this.recordingTracks, track.getName());
+        this.multiPlayGeneral(this.recordingTracks, track.getName());
       }
     }
     else {
@@ -289,6 +290,7 @@ export class ProjectPageComponent implements OnInit {
   public stopRecording() {
     this.recording = false;
     this.mikeRecord.stop(this.processRecording.bind(this));
+    this.mikeRecord = null;
   }
 
 
@@ -426,10 +428,59 @@ export class ProjectPageComponent implements OnInit {
       track.setStop();
       trackSet.reset_offset();
       trackSource.disconnect();
-      this.audioCtx.suspend(); // None can stop
+      if( trackSet.getOffset() == 0 ) {
+        this.audioCtx.suspend();
+      }
     };
 
     // Return true
+    return true;
+  }
+
+
+
+  /**
+   * Mix tracks
+   * 
+   * @param trackSet 
+   */
+  public mixGeneral(trackSet: Tracks) {
+
+    // Get mixed audio signal
+    let mix: Float32Array = trackSet.mixTracks();
+    console.log(`I just an array of size = ${mix.length}`);
+
+    // Create buffer based on largest track & copy data into channels
+    let buffer = this.audioCtx.createBuffer(2, mix.length, trackSet.getLargest().getTrackData().samplingRate);
+    buffer.copyToChannel(mix, 0);
+    buffer.copyToChannel(mix, 1);
+
+    // Convert to blob then build track
+    const mixBlob = this.bufferSourceToBlog(buffer);
+    let mixed = new Track(this.audioServ, {name: 'mixedTrack', url: mixBlob.url});
+    mixed.setAudioFromBlob(mixBlob.blob);
+    console.dir(mixed);
+    trackSet.setMixedTrack(mixed);
+  }
+
+
+  /**
+   * Play mixed track if available and not already playing
+   * 
+   * @param trackSet 
+   * @returns 
+   */
+  public mix_PlayGeneral(trackSet: Tracks) {
+
+    // Validate before proceeding
+    if(trackSet.getMix() == null) {
+      console.log(`Error, no mix track exists`);
+      return false;
+    }
+    if( trackSet.getMix().getPlayingState() ) {
+      console.log(`Error, mixed track already playing`);
+    }
+    this.playTrack(trackSet.getMix());
     return true;
   }
 }
