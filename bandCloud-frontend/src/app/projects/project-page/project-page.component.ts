@@ -129,10 +129,10 @@ export class ProjectPageComponent implements OnInit {
   /**
    * Sort tracks ascendingly by size
    */
-  public sortTracks() {
-    console.dir(this.tracks.getTrackNames());
-    this.tracks.bubbleSort();
-    console.dir(this.tracks.getTrackNames());
+  public sortTracks(trackSet: Tracks) {
+    console.dir(trackSet.getTrackNames());
+    trackSet.bubbleSort();
+    console.dir(trackSet.getTrackNames());
   }
 
 
@@ -251,6 +251,18 @@ export class ProjectPageComponent implements OnInit {
       return false;
     }
 
+
+    // Sync play all tracks if present
+    if ( this.recordingTracks.tracks.length > 0 ) {
+      console.log(`Sync playing all recorded tracks`);
+      for( let track of this.recordingTracks.getTracks() ) {
+        this.playTrackGeneral(this.recordingTracks, track.getName());
+      }
+    }
+    else {
+      console.log(`Recording first track`);
+    }
+
     // Get user media stream
     navigator.mediaDevices.getUserMedia({audio: true})
       .then(this.recordSuccessCallBack.bind(this));
@@ -287,13 +299,13 @@ export class ProjectPageComponent implements OnInit {
   public processRecording(blob: Blob) {
     
     // Create local record
-    this.recordingBlob = blob;
-    this.mikeRecordURL = URL.createObjectURL(blob);
+    let recordingBlob = blob;
+    let mikeRecordURL = URL.createObjectURL(blob);
 
     // Create a track and add data
     let trackName = crypto.randomUUID();
-    let newRecording = new Track(this.audioServ, {name: trackName, url: this.mikeRecordURL});
-    newRecording.setAudioFromBlob(this.recordingBlob);
+    let newRecording = new Track(this.audioServ, {name: trackName, url: mikeRecordURL});
+    newRecording.setAudioFromBlob(recordingBlob);
     this.recordingTracks.addTrack(newRecording);
   }
 
