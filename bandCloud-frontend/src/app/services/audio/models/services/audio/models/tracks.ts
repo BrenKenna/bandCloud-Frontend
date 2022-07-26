@@ -8,7 +8,7 @@ import { Track } from "./track";
 export class Tracks {
 
     // Attributes
-    private tracks: Track[] = [];
+    public tracks: Track[] = [];
     public offset: number = 0;
     public mixedTrack: Track;
 
@@ -104,6 +104,26 @@ export class Tracks {
         this.offset = currentTime;
     }
 
+
+    /**
+     * Reset the offest
+     */
+    public reset_offset() {
+        let active = false;
+        for( let track of this.tracks ) {
+            active = track.getPlayingState();
+        }
+
+        if (active) {
+            console.log(`Error, track from set is still active`);
+            return false;
+        }
+        else {
+            this.offset = 0;
+            console.log(`Track offset has been reset to zero`);
+            return true;
+        }
+    }
 
     /**
      * Method to handle syncronizing play time, at 0 or however long now

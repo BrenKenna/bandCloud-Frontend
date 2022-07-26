@@ -21,6 +21,20 @@
     <button mat-raised-button (click)="recordMicoPhone()" color="primary">Record Audio</button>
     <button mat-raised-button (click)="stopRecording()" color="primary">Stop Recording</button>
     <button mat-raised-button (click)="postTrack()" color="primary">Post Recording</button>
+
+    <br>
+        <mat-divider></mat-divider>
+    <br>
+
+    <mat-card-subtitle>Play recorded tracks</mat-card-subtitle>
+    <ul>
+        <li *ngFor="let track of recordingTracks.tracks">
+            <p>Track Name: {{ track.name }}</p>
+            <button mat-raised-button (click)="playTrackGeneral(recordingTracks, track.name)" color="accent">Play Track</button>
+            <button mat-raised-button (click)="dropFromTracks(recordingTracks, track.name)" color="warn">Drop Track</button>
+            <button mat-raised-button (click)="multiPlayGeneral(recordingTracks, track.name)" color="primary">Sync Play</button>
+        </li>
+    </ul>
 </mat-card>
 
 <br>
@@ -33,9 +47,9 @@
         <li *ngFor="let meta of mockMeta">
             <p>Track Name: {{ meta.name }}</p>
             <button mat-raised-button (click)="fetchTrack(meta.name, meta.path)" color="primary">Fetch Track</button>
-            <button mat-raised-button (click)="playFromTracks(meta.name)" color="accent">Play Track</button>
-            <button mat-raised-button (click)="dropFromTracks(meta.name)" color="warn">Drop Track</button>
-            <button mat-raised-button (click)="tracks_MultiPlay(meta.name)" color="primary">Sync Play</button>
+            <button mat-raised-button (click)="playTrackGeneral(tracks, meta.name)" color="accent">Play Track</button>
+            <button mat-raised-button (click)="dropFromTracks(tracks, meta.name)" color="warn">Drop Track</button>
+            <button mat-raised-button (click)="multiPlayGeneral(tracks, meta.name)" color="primary">Sync Play</button>
         </li>
     </ul>
     <br>

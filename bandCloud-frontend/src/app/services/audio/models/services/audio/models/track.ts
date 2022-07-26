@@ -38,7 +38,7 @@ interface TrackInterface {
 export class Track {
 
     // Core attributes
-    private name: string;
+    public name: string;
     private url: string;
     private isLoaded: boolean = false;
     private isPlaying: boolean = false;

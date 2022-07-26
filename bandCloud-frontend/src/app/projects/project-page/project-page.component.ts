@@ -28,6 +28,8 @@ export class ProjectPageComponent implements OnInit {
   public recording: boolean = false;
   public recordingBlob: Blob;
   public mikeRecordURL: string;
+  public recordingTracks: Tracks = new Tracks();
+  
 
   // Track related
   public track: Track;
@@ -115,55 +117,12 @@ export class ProjectPageComponent implements OnInit {
 
 
   /**
-   * Method to play a track from tracks list
-   *  => Needs to be syncronized
-   * 
-   * @param trackName 
-   * @returns 
-   */
-  public playFromTracks(trackName: string) {
-
-    // Try fetch track
-    console.dir(this.tracks);
-    let track = this.tracks.getTrackByName(trackName);
-    if( track == null ) {
-      console.log(`\nError, track '${trackName}' not found`);
-      return false;
-    }
-
-    // Manage playing state
-    if ( track.getPlayingState() ) {
-      console.log(`\nError, track '${track.getName()}' already playing`);
-      return false;
-    }
-    this.audioServ.manageState();
-    
-    // Update playing state & configure audio node
-    track.setPlaying();
-    const trackSource = this.audioCtx.createBufferSource();
-    trackSource.buffer = track.getAudioBuffer();
-    trackSource.connect(this.audioCtx.destination);
-
-    // Logic for playing
-    trackSource.start();
-    trackSource.onended = () => {
-      track.setStop();
-      trackSource.disconnect();
-      this.audioCtx.suspend(); // None can stop
-    };
-
-    // Return true
-    return true;
-  }
-
-
-  /**
    * Drop a track by their name
    * 
    * @param trackName 
    */
-  public dropFromTracks(trackName: string) {
-    this.tracks.dropTrackByName(trackName);
+  public dropFromTracks(trackSet: Tracks, trackName: string) {
+    trackSet.dropTrackByName(trackName);
   }
 
 
@@ -174,49 +133,6 @@ export class ProjectPageComponent implements OnInit {
     console.dir(this.tracks.getTrackNames());
     this.tracks.bubbleSort();
     console.dir(this.tracks.getTrackNames());
-  }
-
-
-  /**
-   * Method to syncronize playing multiple tracks
-   * 
-   * @param trackName 
-   * @returns 
-   */
-  public tracks_MultiPlay(trackName: string) {
-
-    // Try fetch track
-    console.dir(this.tracks);
-    let track = this.tracks.getTrackByName(trackName);
-    if( track == null ) {
-      console.log(`\nError, track '${trackName}' not found`);
-      return false;
-    }
-    
-    // Manage playing state
-    if ( track.getPlayingState() ) {
-      console.log(`\nError, track '${track.getName()}' already playing`);
-      return false;
-    }
-    this.audioServ.manageState();
-    
-    // Update playing state & configure audio node
-    track.setPlaying();
-    const trackSource = this.audioCtx.createBufferSource();
-    trackSource.buffer = track.getAudioBuffer();
-    trackSource.connect(this.audioCtx.destination);
-
-    // Logic for playing
-    let whereInTrack = this.tracks.getSyncedTime(this.audioCtx.currentTime);
-    trackSource.start(0, whereInTrack);
-    trackSource.onended = () => {
-      track.setStop();
-      trackSource.disconnect();
-      this.audioCtx.suspend(); // None can stop
-    };
-
-    // Return true
-    return true;
   }
 
 
@@ -259,7 +175,7 @@ export class ProjectPageComponent implements OnInit {
     // console.log(this.mixedURL);
 
     // Convert to track
-    let sanitURL = this.sanitize(this.mixedURL);
+    // let sanitURL = this.sanitize(this.mixedURL);
     this.mixedTrack = new Track(this.audioServ, {name: 'mixedTrack', url: this.mixedURL});
     this.mixedTrack.setAudioFromBlob(this.mixedBlob);
     console.dir(this.mixedTrack);
@@ -369,8 +285,16 @@ export class ProjectPageComponent implements OnInit {
    * @param blob 
    */
   public processRecording(blob: Blob) {
+    
+    // Create local record
     this.recordingBlob = blob;
     this.mikeRecordURL = URL.createObjectURL(blob);
+
+    // Create a track and add data
+    let trackName = crypto.randomUUID();
+    let newRecording = new Track(this.audioServ, {name: trackName, url: this.mikeRecordURL});
+    newRecording.setAudioFromBlob(this.recordingBlob);
+    this.recordingTracks.addTrack(newRecording);
   }
 
 
@@ -404,6 +328,96 @@ export class ProjectPageComponent implements OnInit {
             console.dir(data);
       });
     }
+    return true;
+  }
+
+
+
+  /**
+   * Play provided track from provided collection
+   * 
+   * @param trackSet 
+   * @param trackName 
+   * @returns 
+   */
+  public playTrackGeneral(trackSet: Tracks, trackName: string) {
+
+    // Try fetch track
+    console.dir(trackSet);
+    let track = trackSet.getTrackByName(trackName);
+    if( track == null ) {
+      console.log(`\nError, track '${trackName}' not found`);
+      return false;
+    }
+
+    // Manage playing state
+    if ( track.getPlayingState() ) {
+      console.log(`\nError, track '${track.getName()}' already playing`);
+      return false;
+    }
+    this.audioServ.manageState();
+    
+    // Update playing state & configure audio node
+    track.setPlaying();
+    const trackSource = this.audioCtx.createBufferSource();
+    trackSource.buffer = track.getAudioBuffer();
+    trackSource.connect(this.audioCtx.destination);
+
+    // Logic for playing
+    trackSource.start();
+    trackSource.onended = () => {
+      track.setStop();
+      trackSet.reset_offset();
+      trackSource.disconnect();
+      this.audioCtx.suspend(); // None can stop
+    };
+
+    // Return true
+    return true;
+  }
+
+
+  /**
+   * Play a track from a collection
+   * 
+   * @param trackSet 
+   * @param trackName 
+   * @returns 
+   */
+  public multiPlayGeneral(trackSet: Tracks, trackName: string) {
+
+    // Try fetch track
+    console.dir(trackSet);
+    let track = trackSet.getTrackByName(trackName);
+    if( track == null ) {
+      console.log(`\nError, track '${trackName}' not found`);
+      return false;
+    }
+    
+    // Manage playing state
+    if ( track.getPlayingState() ) {
+      console.log(`\nError, track '${track.getName()}' already playing`);
+      return false;
+    }
+    this.audioServ.manageState();
+    
+    // Update playing state & configure audio node
+    track.setPlaying();
+    const trackSource = this.audioCtx.createBufferSource();
+    trackSource.buffer = track.getAudioBuffer();
+    trackSource.connect(this.audioCtx.destination);
+
+    // Logic for playing
+    let whereInTrack = trackSet.getSyncedTime(this.audioCtx.currentTime);
+    trackSource.start(0, whereInTrack);
+    trackSource.onended = () => {
+      track.setStop();
+      trackSet.reset_offset();
+      trackSource.disconnect();
+      this.audioCtx.suspend(); // None can stop
+    };
+
+    // Return true
     return true;
   }
 }
