@@ -40,9 +40,14 @@ export class Tracks {
     /**
      * Internal method to handle mixing process
      * 
-     * @returns Float32Array
+     * @returns Float32Array/null
      */
     public mixTracks() {
+
+        // Return null if no tracks
+        if ( this.tracks.length == 0 ) {
+            return null;
+        }  
 
         // Sort tracks ascendingly
         let

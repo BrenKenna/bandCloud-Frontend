@@ -448,9 +448,13 @@ export class ProjectPageComponent implements OnInit {
 
     // Get mixed audio signal
     let mix: Float32Array = trackSet.mixTracks();
-    console.log(`I just an array of size = ${mix.length}`);
+    if ( mix == null) {
+      console.log(`Error, no tracks exist in collection`);
+      return false;
+    }
 
     // Create buffer based on largest track & copy data into channels
+    console.log(`I just an array of size = ${mix.length}`);
     let buffer = this.audioCtx.createBuffer(2, mix.length, trackSet.getLargest().getTrackData().samplingRate);
     buffer.copyToChannel(mix, 0);
     buffer.copyToChannel(mix, 1);
@@ -461,6 +465,7 @@ export class ProjectPageComponent implements OnInit {
     mixed.setAudioFromBlob(mixBlob.blob);
     console.dir(mixed);
     trackSet.setMixedTrack(mixed);
+    return true;
   }
 
 
