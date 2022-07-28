@@ -19,11 +19,11 @@
     <button mat-raised-button (click)="stopRecording()" color="warn">Stop Recording</button>
     <button mat-raised-button (click)="postTrack()" color="accent">Post Recording</button>
 
-    <br>
-        <mat-divider></mat-divider>
+    <br><br>
+    <mat-divider></mat-divider>
     <br>
 
-    <mat-card-subtitle>Play recorded tracks</mat-card-subtitle>
+    <mat-card-title>Play recorded tracks</mat-card-title>
     <ul>
         <li *ngFor="let track of recordingTracks.tracks">
             <p>Track Name: {{ track.name }}</p>
@@ -62,8 +62,8 @@
 <br>
 
 <mat-card>
+    <!-- Figure Out Mixed Track Here: Audio Source with Controls -->
     <mat-card-title>Test Playing a Mixed Track</mat-card-title>
-    <h4>Figure Out Mixed Track Here: Audio Source with Controls </h4>
     <audio controls="" *ngIf="mixedURL">
         <source [src]="sanitize(mixedURL)" type="audio/wav">
     </audio>

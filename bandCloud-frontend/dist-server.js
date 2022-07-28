@@ -68,7 +68,7 @@ const
 ;
 
 // Serve main page
-const appDir = __dirname + "/dist/file-explorer/";
+const appDir = __dirname + "/dist/bandCloud-frontend/";
 router.use(express.static(appDir));
 router.use(express.urlencoded({extended: true}));
 router.use(express.json());
