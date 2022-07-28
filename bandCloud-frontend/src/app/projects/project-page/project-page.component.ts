@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AudioContext } from 'angular-audio-context';
-import { Subject } from 'rxjs';
 import { BandCloudAudioService } from 'src/app/services/audio/band-cloud-audio.service';
 import { BandCloudRestProjectsService } from 'src/app/services/backend/band-cloud-rest-projects.service';
 import { ProjectModel } from '../model/project-model';
@@ -127,12 +126,20 @@ export class ProjectPageComponent implements OnInit {
 
 
   /**
-   * Sort tracks ascendingly by size
+   * Sort tracks ascendingly by their size
+   * 
+   * @param trackSet 
+   * @returns 
    */
   public sortTracks(trackSet: Tracks) {
+    if(trackSet.tracks.length == 0) {
+      console.log(`Error, no tracks in collection to sort`);
+      return false;
+    }
     console.dir(trackSet.getTrackNames());
     trackSet.bubbleSort();
     console.dir(trackSet.getTrackNames());
+    return true;
   }
 
 
@@ -213,20 +220,6 @@ export class ProjectPageComponent implements OnInit {
   }
 
 
-
-  /**
-   * Play the active mixed track
-   * 
-   * @returns 
-   */
-  public playMixedTrack() {
-    if( this.mixedTrack == null ) {
-      console.log(`Error, mixed track does not exist`);
-      return false;
-    }
-    return this.playTrack(this.mixedTrack);
-  }
-
   /**
    * 
    * Last bits
@@ -289,7 +282,9 @@ export class ProjectPageComponent implements OnInit {
    */
   public stopRecording() {
     this.recording = false;
-    this.mikeRecord.stop(this.processRecording.bind(this));
+    if (this.mikeRecord != null) {
+      this.mikeRecord.stop(this.processRecording.bind(this));
+    }
     this.mikeRecord = null;
   }
 
@@ -440,9 +435,10 @@ export class ProjectPageComponent implements OnInit {
 
 
   /**
-   * Mix tracks
+   * Mix tracks from a track collection
    * 
    * @param trackSet 
+   * @returns true/false for mixing status
    */
   public mixGeneral(trackSet: Tracks) {
 

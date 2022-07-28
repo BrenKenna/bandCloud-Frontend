@@ -54,7 +54,7 @@
     </ul>
     <br>
     <button mat-raised-button (click)="sortTracks(tracks)" color="accent">Sort Tracks</button>
-    <button mat-raised-button (click)="tracksMixer(tracks)" color="warn">Mix Tracks</button>
+    <button mat-raised-button (click)="mixGeneral(tracks)" color="warn">Mix Tracks</button>
 </mat-card>
 
 <br>
@@ -67,7 +67,7 @@
     <audio controls="" *ngIf="mixedURL">
         <source [src]="sanitize(mixedURL)" type="audio/wav">
     </audio>
-    <button mat-raised-button color="accent" (click)="playMixedTrack()">Reload & Play mix</button>
+    <button mat-raised-button color="accent" (click)="mix_PlayGeneral(recordingTracks)">Reload & Play mix</button>
 </mat-card>
 
 <!--
