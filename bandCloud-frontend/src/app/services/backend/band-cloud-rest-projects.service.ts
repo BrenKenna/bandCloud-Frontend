@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ProjectModel } from 'src/app/projects/model/project-model';
-import { ProjectsModel } from 'src/app/projects/model/projects-model';
+// import { ProjectsModel } from 'src/app/projects/model/projects-model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class BandCloudRestProjectsService {
   private _rootPath = "https://bandcloudapp.com";
   private _paths = {
     "projects": {
-        "Requests": ["GET"],
+        "Requests": ["GET", "POST"],
         "root" : this._rootPath + "/projects",
         "projects-viewer": this._rootPath + "/projects/listProjects",
         "project-viewer": this._rootPath + "/projects/listProject",
