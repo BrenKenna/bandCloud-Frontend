@@ -1,32 +1,9 @@
 /**
  * App to serve the SPA and proxy requests to backend resources
- *  => Decided to not explore further for this project as all forwarding requests needs to be coded.
- * 
- *  => Additionally axios was useful for successul forwarding. 
- *      In that I could maybe do something more, but it didn't work "of the shelf" and got the below error.
- *      The request is successfully sent to the backend & the response does send back data in body
- *          => Maybe something here is the issue, checkout in another project.
- *          => Problem was incorrect handling of the backend response
- *          => Having the application hosted + private domain helped narrow down problem
- *          => Outstanding issues here are handling of login response as cookie
- * 
- *  => Using angluar clients development server, as fallback for proxying requests
- *      => But running on EC2 asks for user input so not doing that
- * 
- *  => I can however deploy this, use a shell script to update the backend ELB and access app over the web
- *      => While the docker container will be big, I still have a frontend that:
- *          1. Is accessible over the web (ie makes use of cloud infrastructure)
- *          2. Can talk to the backend REST API
- *          3. Can be updated for using a valid X509 cert so that communications are encrypted
- *              => Self-signed certs causing issues that they weren't before.
- *                  Ignoring it, but leaving the code in
- * 
- *          4. Can be further developed to proxy requests to backend resources, in a customizable manner
- *          5. Have done everything I have set out to do :)
- * 
- * TypeError [ERR_INVALID_ARG_TYPE]: The "chunk" argument must be of type string or an instance of Buffer or Uint8Array. 
- *  Received an instance of Array
- * 
+ * => Proxy do work, but cookies are forwarded.
+ * => Data is recived by this server, can it under
+ *      res.headers['set-cookie']
+ * => Perhaps there is a better way to do this
  * 
  * blackSabbath
  * sabbath@sabbath-band.com
@@ -43,7 +20,8 @@ const
     proxyConf = require('./src/proxy-config.json'),
     fs = require('fs')
 ;
-// httpProxy = require('http-proxy')
+// httpProxy = require('http-proxy');
+// bodyParser = require('body-parser');
 
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
@@ -70,9 +48,10 @@ const
 // Serve main page
 const appDir = __dirname + "/dist/bandCloud-frontend/";
 router.use(express.static(appDir));
-router.use(express.urlencoded({extended: true}));
+router.use(express.urlencoded({extended: false}));
 router.use(express.json());
-
+// const jsonParser = bodyParser.json();
+// const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 /**
  * 
@@ -81,7 +60,11 @@ router.use(express.json());
  */
 
 // Setup proxy
-const instance = axios.create();
+const instance = axios.create(
+    {
+        withCredentials: true
+    }
+);
 const
     backendHost = 'resource.bandcloud.com',
     apiForwardingUrl = 'http://' + backendHost + ':8080'
@@ -91,66 +74,110 @@ const
 
 /**
  * Configure accounts-manage proxy paths
+ *  => application/...form... because forwarded request was empty
+ *  => 'Required request body is missing' not being handled correctly
+ *      => Tried stringifying body
 */
 
 // Registration: 
-router.all("/account/manage/register", function(req, resp) {
+router.post("/account/manage/register", function(req, resp) {
 
     // Serve back json
     console.log(`\n\nA request came in for: ${req.url}`);
-    console.dir(req, {depth: null});
-    resp.writeHead(200, {'Content-Type': 'application/json'});
+    console.log(req.body);
+    console.log(JSON.stringify(req.body));
 
     // Fetch promise for the auth page
-    let data = instance.post(`${apiForwardingUrl}/account/manage/register`);
+    let data = instance.post(
+        `${apiForwardingUrl}/account/manage/register`,
+        JSON.stringify(req.body),
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Proxy-Connection': 'keep-alive'
+            }
+        }
+    );
     
     // Resolve promise
     data.then( function(res) {
-        resp.end(res.data);
+        resp.writeHead(200, {'Content-Type': 'application/json'});
+        resp.end(JSON.stringify(res.data));
     })
     .catch( (error) => {
-        console.log(error);
+        if( error.response.data != undefined ) {
+            resp.writeHead(error.response.status, {'Content-Type': 'application/json'});
+            resp.end(JSON.stringify(error.response.data));
+        }
+        //console.dir(error.response, {depth: null});
     });
 });
 
 
 // Login
-router.all("/account/manage/login", function(req, resp) {
+router.post("/account/manage/login", function(req, resp) {
 
     // Serve back json
     console.log(`A request came in for: ${req.url}`);
-    console.dir(req, {depth: null});
-    resp.writeHead(200, {'Content-Type': 'application/json'});
+    // console.dir(req, {depth: null});
 
     // Fetch promise for the auth page
-    let data = instance.post(`${apiForwardingUrl}/account/manage/login`);
+    let data = instance.post(
+        `${apiForwardingUrl}/account/manage/login`,
+        JSON.stringify(req.body),
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Proxy-Connection': 'keep-alive'
+            }
+        }
+    );
     
     // Resolve promise
     data.then( function(res) {
-        resp.end(res.data);
+        resp.writeHead(200, {'Content-Type': 'application/json'});
+        resp.end(JSON.stringify(res.data));
     })
     .catch( (error) => {
-        console.log(error);
+        if( error.response.data != undefined ) {
+            resp.writeHead(error.response.status, {'Content-Type': 'application/json'});
+            resp.end(JSON.stringify(error.response.data));
+        }
+        console.dir(error.response, {depth: null});
     });
 });
 
 
 // Deregister
-router.all("/account/manage/deregister", function(req, resp) {
+router.post("/account/manage/deregister", function(req, resp) {
 
     // Serve back json
     console.log(`A request came in for: ${req.url}`);
-    resp.writeHead(200, {'Content-Type': 'application/json'});
+    
 
     // Fetch promise for the auth page
-    let data = instance.post(`${apiForwardingUrl}/account/manage/deregister`);
+    let data = instance.post(
+        `${apiForwardingUrl}/account/manage/deregister`,
+        JSON.stringify(req.body),
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Proxy-Connection': 'keep-alive'
+            }
+        }
+    );
     
     // Resolve promise
     data.then( function(res) {
-        resp.end(res.data);
+        resp.writeHead(200, {'Content-Type': 'application/json'});
+        resp.end(JSON.stringify(res.data));
     })
     .catch( (error) => {
-        console.log(error);
+        if( error.response.data != undefined ) {
+            resp.writeHead(error.response.status, {'Content-Type': 'application/json'});
+            resp.end(JSON.stringify(error.response.data));
+        }
+        console.dir(error.response, {depth: null});
     });
 });
 
