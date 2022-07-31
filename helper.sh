@@ -143,3 +143,28 @@ npm i -g express http-proxy axios
 openssl genrsa -out key.pem
 openssl req -new -key key.pem -out csr.pem
 openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem
+
+
+
+
+############################################
+# 
+# Debug deployment issues
+# 
+############################################
+
+
+# Backup related files
+cd bandCloud-frontend/dist/bandCloud-frontend/
+cp common.de684379de5228ad.js ~/
+
+
+# Redirect server calls to self
+# sed 's/;/;\n/g' common.de684379de5228ad.js | less
+sed 's/bandcloudapp.com:8080/54.216.44.111:8080/g' common.de684379de5228ad.js > tmp
+mv tmp common.de684379de5228ad.js
+cd ../../
+
+
+# 
+node dist-server.js
