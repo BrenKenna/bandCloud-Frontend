@@ -5,10 +5,35 @@
  *      res.headers['set-cookie']
  * => Perhaps there is a better way to do this
  * 
- * blackSabbath
- * sabbath@sabbath-band.com
- * A30£f6^2$cE4-a?bf4
  * 
+ * 
+ * 
+ 
+POST - http://54.216.44.111:8080/account/manage/register
+{
+    "username": "maidenIron",
+    "email": "harris@maiden.com",
+    "password": "harris@maiden.com",
+    "accountHolder": "GOLD"
+}
+
+POST - http://54.216.44.111:8080/account/manage/login
+{
+    "username": "maidenIron",
+    "email": "harris@maiden.com",
+    "password": "harris@maiden.com"
+}
+
+GET - http://54.216.44.111:8080/account/display/view
+
+
+POST - http://54.216.44.111:8080/account/display/update?updateName=true&updateEmail=true&updateAuth=true&updateAccount=true
+{
+    "username": "donald-duck",
+    "email": "donald-duck@donaldTheDuck.com",
+    "password": "P@5St0rD",
+    "accountHolder": "SILVER"
+}
  */
 
 // Import required modules
@@ -18,7 +43,8 @@ const
     express = require('express'),
     axios = require('axios'),
     proxyConf = require('./src/proxy-config.json'),
-    fs = require('fs')
+    fs = require('fs'),
+    cookieParser = require('cookie-parser');
 ;
 // httpProxy = require('http-proxy');
 // bodyParser = require('body-parser');
@@ -50,6 +76,7 @@ const appDir = __dirname + "/dist/bandCloud-frontend/";
 router.use(express.static(appDir));
 router.use(express.urlencoded({extended: false}));
 router.use(express.json());
+router.use(cookieParser());
 // const jsonParser = bodyParser.json();
 // const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -101,6 +128,25 @@ router.post("/account/manage/register", function(req, resp) {
     
     // Resolve promise
     data.then( function(res) {
+        
+        // Check backend response
+        // console.dir(res.headers['set-cookie']);
+        for(let cookieData of res.headers['set-cookie']) {
+
+            // Get cookie key & value
+            let cookieKey = cookieData.split(";")[0].split("=")[0];
+            let cookieVal = cookieData.split(";")[0].split("=")[1];
+
+            // Create cookie
+            resp.cookie(cookieKey, cookieVal, {
+                maxAge: (3 * 24 * 60 * 60),
+                httpOnly: true,
+                path: "/"
+            });
+        }
+
+        // Send response
+        // console.dir(resp, {depth: null});
         resp.writeHead(200, {'Content-Type': 'application/json'});
         resp.end(JSON.stringify(res.data));
     })
@@ -135,6 +181,25 @@ router.post("/account/manage/login", function(req, resp) {
     
     // Resolve promise
     data.then( function(res) {
+        
+        // Set response cookie
+        // console.dir(res.headers['set-cookie']);
+        for(let cookieData of res.headers['set-cookie']) {
+
+            // Get cookie key & value
+            let cookieKey = cookieData.split(";")[0].split("=")[0];
+            let cookieVal = cookieData.split(";")[0].split("=")[1];
+
+            // Create cookie
+            resp.cookie(cookieKey, cookieVal, {
+                maxAge: (3 * 24 * 60 * 60),
+                httpOnly: true,
+                path: "/"
+            });
+        }
+
+        // Send response
+        // console.dir(resp, {depth: null});
         resp.writeHead(200, {'Content-Type': 'application/json'});
         resp.end(JSON.stringify(res.data));
     })
@@ -143,7 +208,7 @@ router.post("/account/manage/login", function(req, resp) {
             resp.writeHead(error.response.status, {'Content-Type': 'application/json'});
             resp.end(JSON.stringify(error.response.data));
         }
-        console.dir(error.response, {depth: null});
+        // console.dir(error.response, {depth: null});
     });
 });
 
@@ -183,12 +248,114 @@ router.post("/account/manage/deregister", function(req, resp) {
 
 
 /**
+ * Configure User Display proxy paths
+ * 
+ * Server replies unauthorized based on cookie, tried:
+ *  - Sending as is
+ *  - Sending the req object
+ *      => Worked fine, dropping caused unauthorized error
+ * 
+ */
+
+// Define proxy paths
+router.get("/account/display/view", function(req, resp) {
+
+    // Serve back json
+    console.log(`\n\nA request came in for: ${req.url}`);
+    
+
+    // Fetch promise for the auth page
+    let data = instance.get(
+        `${apiForwardingUrl}/account/display/view`,
+        req
+    );
+    
+    // Resolve promise
+    data.then( function(res) {
+        resp.writeHead(200, {'Content-Type': 'application/json'});
+        resp.end(JSON.stringify(res.data));
+    })
+    .catch( (error) => {
+        if( error.response.data != undefined ) {
+            resp.writeHead(error.response.status, {'Content-Type': 'application/json'});
+            resp.end(JSON.stringify(error.response.data));
+        }
+        console.dir(error.response, {depth: null});
+    });
+});
+
+
+/**
+ * Define proxy for user account updates
+ * 
+ * Forwarding request = Unsupported Media Type
+ *  - Both the req.headers & req.cookies => have the data
+ *  - Tried adding the cookie to head via ` 'Cookie': req.headers.cookie `
+ *      => Worked fine, API responds with new session
+ */
+router.post("/account/display/update", function(req, resp) {
+
+    // Serve back json
+    console.log(`\n\nA request came in for: ${apiForwardingUrl + req.url}`);
+    console.dir(req.body, {depth: null});
+    console.dir(req.headers, {depth: null});
+    console.dir(req.cookies, {depth: null});
+    // console.dir(req, {depth: null});
+
+    // Fetch promise for the auth page
+    let data = instance.post(
+        `${apiForwardingUrl + req.url}`,
+        JSON.stringify(req.body),
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Proxy-Connection': 'keep-alive',
+                'Cookie': req.headers.cookie
+            }
+        }
+    );
+    
+    // Resolve promise
+    data.then( function(res) {
+
+        // Set response cookie
+        console.dir(res.headers['set-cookie']);
+        for(let cookieData of res.headers['set-cookie']) {
+
+            // Get cookie key & value
+            let cookieKey = cookieData.split(";")[0].split("=")[0];
+            let cookieVal = cookieData.split(";")[0].split("=")[1];
+
+            // Create cookie
+            resp.cookie(cookieKey, cookieVal, {
+                maxAge: (3 * 24 * 60 * 60),
+                httpOnly: true,
+                path: "/"
+            });
+        }
+
+        // Send response
+        resp.writeHead(200, {'Content-Type': 'application/json'});
+        resp.end(JSON.stringify(res.data));
+    })
+    .catch( (error) => {
+        if( error.response.data != undefined ) {
+            resp.writeHead(error.response.status, {'Content-Type': 'application/json'});
+            resp.end(JSON.stringify(error.response.data));
+        }
+        console.dir(error.response, {depth: null});
+    });
+});
+
+
+
+/**
  * Configure projects proxy paths
 */
 
 
 // Define proxy paths
-router.all("/projects/listProject", function(req, resp) {
+router.get("/projects/listProject", function(req, resp) {
 
     // Serve back json
     console.log(`\n\nA request came in for: ${req.url}`);
@@ -208,7 +375,7 @@ router.all("/projects/listProject", function(req, resp) {
 
 
 // List projects
-router.all("/projects/listProjects", function(req, resp) {
+router.get("/projects/listProjects", function(req, resp) {
 
     // Serve back json
     console.log(`\n\nA request came in for: ${req.url}`);

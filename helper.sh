@@ -168,3 +168,9 @@ cd ../../
 
 # 
 node dist-server.js
+
+
+
+tar -czf bandCloud-Angular.tar.gz bandCloud-Frontend/
+aws s3 cp bandCloud-Angular.tar.gz s3://bandcloud/app/
+rm -f bandCloud-Angular.tar.gz
