@@ -7,8 +7,8 @@ import { ProjectModel } from '../model/project-model';
 
 import * as RecordRTC from 'recordrtc';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Track } from 'src/app/services/audio/models/services/audio/models/track';
-import { Tracks } from 'src/app/services/audio/models/services/audio/models/tracks';
+import { Track } from 'src/app/services/audio/models/track';
+import { Tracks } from 'src/app/services/audio/models/tracks';
 import { MOCK_META } from '../model/mock-data/mock-meta';
 @Component({
   selector: 'app-project-page',

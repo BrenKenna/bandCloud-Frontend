@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { AudioContext } from 'angular-audio-context';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Track } from './models/services/audio/models/track';
+import { Track } from './models/track';
 
 
 // App related
