@@ -221,109 +221,12 @@ export class ProjectPageComponent implements OnInit {
 
 
   /**
-   * 
-   * Last bits
-   * 
-   * Manage recording (ie Recording -> Track)
-   *          +
-   * Track/Audio-Buffer -> Blob
-   *          +
-   * Mixed audio -> Track
-   * 
-   */
-
-
-  /**
-   * 
-   * @returns 
-   */
-  public recordMicoPhone() {
-
-    // Log unavailable if media devices is not supported
-    if ( !navigator.mediaDevices) {
-      console.log("Get user media not supported by browser");
-      return false;
-    }
-
-
-    // Sync play all tracks if present
-    if ( this.recordingTracks.tracks.length > 0 ) {
-      console.log(`Sync playing all recorded tracks`);
-      for( let track of this.recordingTracks.getTracks() ) {
-        this.multiPlayGeneral(this.recordingTracks, track.getName());
-      }
-    }
-    else {
-      console.log(`Recording first track`);
-    }
-
-    // Get user media stream
-    navigator.mediaDevices.getUserMedia({audio: true})
-      .then(this.recordSuccessCallBack.bind(this));
-    return true;
-  }
-
-
-  /**
-   * 
-   * @param stream 
-   */
-  public recordSuccessCallBack(stream: MediaStream) {
-
-    // Record mike
-    this.recording = true;
-    this.mikeRecord = new RecordRTC.StereoAudioRecorder(stream);
-    this.mikeRecord.record();
-  }
-
-
-  /**
-   * 
-   */
-  public stopRecording() {
-    this.recording = false;
-    if (this.mikeRecord != null) {
-      this.mikeRecord.stop(this.processRecording.bind(this));
-    }
-    this.mikeRecord = null;
-  }
-
-
-  /**
-   * 
-   * @param blob 
-   */
-  public processRecording(blob: Blob) {
-    
-    // Create local record
-    let recordingBlob = blob;
-    let mikeRecordURL = URL.createObjectURL(blob);
-
-    // Create a track and add data
-    let trackName = crypto.randomUUID();
-    let newRecording = new Track(this.audioServ, {name: trackName, url: mikeRecordURL});
-    newRecording.setAudioFromBlob(recordingBlob);
-    this.recordingTracks.addTrack(newRecording);
-  }
-
-
-  /**
-   * 
-   * @param url 
-   * @returns 
-   */
-  public sanitize(url: string) {
-    return this.domSanitizer.bypassSecurityTrustUrl(url);
-  }
-
-
-  /**
    * Post the mixed track from a collection tracks
    * 
    * @param tracks 
    * @returns boolean
    */
-  public postMix(tracks: Tracks) {
+   public postMix(tracks: Tracks) {
 
     // Log error if no mix
     if ( tracks.mixedTrack == null ) {
@@ -459,7 +362,7 @@ export class ProjectPageComponent implements OnInit {
     }
 
     // Create buffer based on largest track & copy data into channels
-    console.log(`I just an array of size = ${mix.length}`);
+    console.log(`I just got an array of size = ${mix.length}`);
     let buffer = this.audioCtx.createBuffer(2, mix.length, trackSet.getLargest().getTrackData().samplingRate);
     buffer.copyToChannel(mix, 0);
     buffer.copyToChannel(mix, 1);
@@ -492,5 +395,99 @@ export class ProjectPageComponent implements OnInit {
     }
     this.playTrack(trackSet.getMix());
     return true;
+  }
+
+  /**
+   * 
+   * - While the following methods are ported from a tutorial,
+   *   how they handled callbacks helped me figure Track-Tracks.
+   * 
+   * - Unfortunately I cant find the original reference
+   * 
+   * - Rather than change them too much decided to just encase
+   *   above methods where needed.
+   * 
+   */
+
+  /**
+   * 
+   * @returns 
+   */
+  public recordMicoPhone() {
+
+    // Log unavailable if media devices is not supported
+    if ( !navigator.mediaDevices) {
+      console.log("Get user media not supported by browser");
+      return false;
+    }
+
+    // Sync play all tracks if present
+    if ( this.recordingTracks.tracks.length > 0 ) {
+      console.log(`Sync playing all recorded tracks`);
+      for( let track of this.recordingTracks.getTracks() ) {
+        this.multiPlayGeneral(this.recordingTracks, track.getName());
+      }
+    }
+    else {
+      console.log(`Recording first track`);
+    }
+
+    // Get user media stream
+    navigator.mediaDevices.getUserMedia({audio: true})
+      .then(this.recordSuccessCallBack.bind(this));
+    return true;
+  }
+
+
+  /**
+   * 
+   * @param stream 
+   */
+  public recordSuccessCallBack(stream: MediaStream) {
+
+    // Record mike
+    this.recording = true;
+    this.mikeRecord = new RecordRTC.StereoAudioRecorder(stream);
+    this.mikeRecord.record();
+  }
+
+
+  /**
+   * 
+   */
+  public stopRecording() {
+    this.recording = false;
+    if (this.mikeRecord != null) {
+      this.mikeRecord.stop(this.processRecording.bind(this));
+    }
+    this.mikeRecord = null;
+  }
+
+
+  /**
+   * 
+   * @param blob 
+   */
+  public processRecording(blob: Blob) {
+    
+    // Create local record
+    let recordingBlob = blob;
+    let mikeRecordURL = URL.createObjectURL(blob);
+
+    // Create a track and add data
+    let trackName = crypto.randomUUID();
+    let newRecording = new Track(this.audioServ, {name: trackName, url: mikeRecordURL});
+    newRecording.setAudioFromBlob(recordingBlob);
+    this.recordingTracks.addTrack(newRecording);
+  }
+
+
+  /**
+   * 
+   * @param url 
+   * @returns 
+   */
+  public sanitize(url: string) {
+    return this.domSanitizer.bypassSecurityTrustUrl(url);
   }
 }
