@@ -17,7 +17,6 @@
     <mat-card-title>Record Audio</mat-card-title>
     <button mat-raised-button (click)="recordMicoPhone()" color="primary">Record Audio</button>
     <button mat-raised-button (click)="stopRecording()" color="warn">Stop Recording</button>
-    <button mat-raised-button (click)="postTrack()" color="accent">Post Recording</button>
 
     <br><br>
     <mat-divider></mat-divider>
@@ -35,6 +34,7 @@
     <br>
     <button mat-raised-button color="primary" (click)="mixGeneral(recordingTracks)">Mix recordings</button>
     <button mat-raised-button color="warn" (click)="mix_PlayGeneral(recordingTracks)">Play mix</button>
+    <button mat-raised-button color="accent" (click)="postMix(recordingTracks)">Post mix</button>
 </mat-card>
 
 <br>

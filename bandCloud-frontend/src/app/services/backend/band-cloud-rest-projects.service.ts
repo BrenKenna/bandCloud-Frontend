@@ -14,9 +14,9 @@ export class BandCloudRestProjectsService {
   };
 
   // Attribute to hold endpoints etc
-  // private _rootPath = "http://localhost:4200";
+  private _rootPath = "http://localhost:4200";
   // private _rootPath = "http://bandcloudapp.com:8080";
-  private _rootPath = "https://bandcloudapp.com";
+  // private _rootPath = "https://bandcloudapp.com";
   private _paths = {
     "projects": {
         "Requests": ["GET", "POST"],

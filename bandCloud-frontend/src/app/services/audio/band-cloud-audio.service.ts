@@ -27,8 +27,9 @@ export class BandCloudAudioService {
 
 
   /**
+   * Return the audio context
    * 
-   * @returns 
+   * @returns AudioContext
    */
   public getAudioCtx() {
     return this.audioCtx;
@@ -36,6 +37,7 @@ export class BandCloudAudioService {
 
 
   /**
+   * Manage the state of the audio context
    * 
    */
   public async manageState() {
@@ -46,7 +48,7 @@ export class BandCloudAudioService {
 
 
   /**
-   * 
+   * Clunky method to generate an audio buffer from a random array of numbers
    */
   public whiteNoiseTest(trackLength: number) {
     
@@ -124,7 +126,7 @@ export class BandCloudAudioService {
     return subject.asObservable();
   }
 
-  s
+
   /**
    * Fetch an audio buffer from a blob
    * 
@@ -148,6 +150,7 @@ export class BandCloudAudioService {
 
 
   /**
+   * Mix two tracks
    * 
    * @param trackA 
    * @param trackB 
@@ -244,6 +247,7 @@ export class BandCloudAudioService {
     return sum;
   }
 
+
   /**
    * Generate a distortion curve from user prompt and length of audio track
    * 
@@ -268,6 +272,65 @@ export class BandCloudAudioService {
   };
 
 
+  
+  /**
+   * Handle playing a track
+   * 
+   *  Code runs fine but track does not play
+   *    Things look to be order, so hard to figure out
+   *      Maybe it should return it and the page standardizes logic.
+   * 
+   *  Thinking that a promise should be returned, because doesn't work
+   *   on page in one button but does in two
+   * 
+   * @param track 
+   * @returns 
+   */
+   public playTrack(track: Track) {
+    
+    // Manage context + track state
+    if( track.getPlayingState() ) {
+      console.log(`\nError, track '${track.getName()}' is already playing`);
+      return false;
+    }
+    this.manageState();
+    console.log(this.audioCtx.state);
+    // console.dir(track); // Is fine here
+
+    // Update playing state & configure audio node
+    console.log(`\nConfiguring track '${track.getName()}' to play`);
+    track.setPlaying();
+    const trackSource = this.audioCtx.createBufferSource();
+    trackSource.buffer = track.getAudioBuffer();
+    trackSource.connect(this.audioCtx.destination);
+
+    // Logic for playing
+    console.log("\nPlaying track");
+    trackSource.start();
+    // console.dir(trackSource); // Looks ok
+    trackSource.onended =
+      () => {
+        track.setStop();
+        trackSource.disconnect();
+        // this.audioCtx.suspend(); // Want to work this in more
+        console.log(`Track '${track.getName()}' is finished playing`);
+      };
+
+    // Return operation state
+    console.log("Done");
+    return true;
+  }
+
+  
+  /** 
+   * The following is a hard copy for converting an
+   *  audio buffer to a wav blob.... Should really be part
+   *  of web audio 
+   * https://stackoverflow.com/questions/62172398/convert-audiobuffer-to-arraybuffer-blob-for-wav-download
+   * 
+   * Section is intentionally left the end
+  */
+
   // Returns Uint8Array of WAV bytes
   public getWavBytes(buffer, options) {
     const type = options.isFloat ? Float32Array : Uint16Array
@@ -285,7 +348,6 @@ export class BandCloudAudioService {
 
   // adapted from https://gist.github.com/also/900023
   // returns Uint8Array of WAV header bytes
-  // https://stackoverflow.com/questions/62172398/convert-audiobuffer-to-arraybuffer-blob-for-wav-download
   public getWavHeader(options) {
     const numFrames = options.numFrames
     const numChannels = options.numChannels || 2
@@ -334,54 +396,5 @@ export class BandCloudAudioService {
     writeUint32(dataSize)            // Subchunk2Size
 
     return new Uint8Array(buffer)
-  }
-
-
-  /**
-   * Handle playing a track
-   * 
-   *  Code runs fine but track does not play
-   *    Things look to be order, so hard to figure out
-   *      Maybe it should return it and the page standardizes logic.
-   * 
-   *  Thinking that a promise should be returned, because doesn't work
-   *   on page in one button but does in two
-   * 
-   * @param track 
-   * @returns 
-   */
-  public playTrack(track: Track) {
-    
-    // Manage context + track state
-    if( track.getPlayingState() ) {
-      console.log(`\nError, track '${track.getName()}' is already playing`);
-      return false;
-    }
-    this.manageState();
-    console.log(this.audioCtx.state);
-    // console.dir(track); // Is fine here
-
-    // Update playing state & configure audio node
-    console.log(`\nConfiguring track '${track.getName()}' to play`);
-    track.setPlaying();
-    const trackSource = this.audioCtx.createBufferSource();
-    trackSource.buffer = track.getAudioBuffer();
-    trackSource.connect(this.audioCtx.destination);
-
-    // Logic for playing
-    console.log("\nPlaying track");
-    trackSource.start();
-    // console.dir(trackSource); // Looks ok
-    trackSource.onended =
-      () => {
-        track.setStop();
-        trackSource.disconnect();
-        // this.audioCtx.suspend(); // Want to work this in more
-        console.log(`Track '${track.getName()}' is finished playing`);
-      };
-
-    // Return operation state
-    console.log("Done");
-    return true;
   }
 }

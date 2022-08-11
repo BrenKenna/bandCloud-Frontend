@@ -71,6 +71,7 @@ export class ProjectPageComponent implements OnInit {
     );
   }
 
+
   /**
    * Fetch and add track
    * 
@@ -188,7 +189,6 @@ export class ProjectPageComponent implements OnInit {
     this.mixedTrack.setAudioFromBlob(this.mixedBlob);
     console.dir(this.mixedTrack);
   }
-
 
 
   /**
@@ -318,30 +318,39 @@ export class ProjectPageComponent implements OnInit {
 
 
   /**
+   * Post the mixed track from a collection tracks
    * 
-   * @returns 
+   * @param tracks 
+   * @returns boolean
    */
-  public postTrack() {
-    if ( this.mikeRecordURL == null ) {
-      console.log("Recording data not yet available");
+  public postMix(tracks: Tracks) {
+
+    // Log error if no mix
+    if ( tracks.mixedTrack == null ) {
+      console.log(`Error, no mix has been created from recorded tracks`);
       return false;
     }
 
-    // Read blob
+    // Convert audio buffer to a WAV blob
+    const trackBlob = this.bufferSourceToBlog(tracks.getMix().getAudioBuffer());
+
+    // Read data into an URL
     let reader = new FileReader();
-    reader.readAsDataURL(this.recordingBlob);
+    reader.readAsDataURL(trackBlob.blob);
+
+    // Use the bandCloud-API service method to post the blob
     reader.onloadend = () => {
       console.log(`Blob-64 Size = ${reader.result.toString().length}`);
       this.bandServ.postAudio(reader.result).subscribe(
         (data) => {
-            console.dir(data);
+            // console.dir(data);
+            console.log(`Your mixed audio recording has successfully being posted`);
       });
     }
     return true;
   }
 
-
-
+  
   /**
    * Play provided track from provided collection
    * 
