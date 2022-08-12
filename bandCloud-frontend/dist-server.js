@@ -6,8 +6,6 @@
  * => Perhaps there is a better way to do this
  * 
  * 
- * 
- * 
  
 POST - http://54.216.44.111:8080/account/manage/register
 {
@@ -74,8 +72,8 @@ const
 // Serve main page
 const appDir = __dirname + "/dist/bandCloud-frontend/";
 router.use(express.static(appDir));
-router.use(express.urlencoded({extended: false}));
-router.use(express.json());
+router.use(express.urlencoded({limit: '50mb', extended: false}));
+router.use(express.json({limit: '50mb'}));
 router.use(cookieParser());
 // const jsonParser = bodyParser.json();
 // const urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -394,22 +392,40 @@ router.get("/projects/listProjects", function(req, resp) {
 });
 
 
-// Post recording
-router.all("/projects/post-recording", function(req, resp) {
+//
+// Post recording: Only expecting a string = data:audio/wav;base64,UklGRtSczwNXQVZ.....
+//   Was not the case, becaue server is configured for json
+//   Meant changing Angular-app from string to object
+//   Because file is massive had to also update size limit
+//   Then it worked, but I think the current approach is a little daft
+//      maybe a better way to this 
+//
+router.post("/projects/post-recording", function(req, resp) {
 
     // Serve back json
     console.log(`A request came in for: ${req.url}`);
-    resp.writeHead(200, {'Content-Type': 'application/json'});
+    //console.dir(req.body); // If spams screen then we know it was read lol
 
     // Fetch promise for the auth page
-    let data = instance.get(`${apiForwardingUrl}/projects/post-recording`);
+    let data = instance.post(
+        `${apiForwardingUrl}/projects/post-recording`,
+        req.body.data,
+        {
+            headers: {
+                'Content-Type': 'audio/wav',
+                'Proxy-Connection': 'keep-alive'
+            }
+        }
+    );
     
     // Resolve promise
     data.then( function(res) {
-        resp.end(res.data);
+        // Send response
+        resp.writeHead(200, {'Content-Type': 'application/json'});
+        resp.end(JSON.stringify(res.data));
     })
     .catch( (error) => {
-        console.log(error);
+        console.log(error.data);
     });
 });
 
