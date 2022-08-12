@@ -87,7 +87,9 @@ router.use(cookieParser());
 // Setup proxy
 const instance = axios.create(
     {
-        withCredentials: true
+        withCredentials: true,
+        maxBodyLength: 51000000,
+        maxContentLength: 51000000
     }
 );
 const
@@ -425,7 +427,9 @@ router.post("/projects/post-recording", function(req, resp) {
         resp.end(JSON.stringify(res.data));
     })
     .catch( (error) => {
-        console.log(error.data);
+        console.log(error.headers);
+        console.log(error.status);
+        console.log(error.message);
     });
 });
 

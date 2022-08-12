@@ -63,14 +63,14 @@ export class BandCloudRestProjectsService {
    */
   public postAudio( data: string | ArrayBuffer ) {
     let url = `${this._paths.projects['post-recording']}`;
-    
-    /**
-     * // Running locally
-     * let postHeaders = { "headers": {'type' : 'audio/wav'}};
-     * return this.http.post<string>(url, data, postHeaders);
-     */
     let postHeaders = { "headers": {'type' : 'application/json'}};
     let body = {"data": data};
     return this.http.post(url, body, postHeaders);
+
+    /*
+    // Running locally
+    let postHeaders = { "headers": {'type' : 'audio/wav'}};
+    return this.http.post<string>(url, data, postHeaders);
+    */
   }
 }

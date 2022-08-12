@@ -45,7 +45,7 @@ export class User {
      * @param registrationView 
      */
     constructor(registrationView?: UserInterface) {
-        console.log("A User has being created");
+        console.log("A User has being created for validation");
         this.username = registrationView?.username ?? "";
         this.password = registrationView?.password ?? "";
         this.email = registrationView?.email ?? "";
