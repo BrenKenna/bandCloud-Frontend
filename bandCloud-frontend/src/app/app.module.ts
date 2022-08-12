@@ -27,7 +27,7 @@ import { AppComponent } from './app.component';
 import { FilePickerComponent } from './file-picker/file-picker.component';
 import { FileDropzoneComponent } from './file-dropzone/file-dropzone.component';
 import { ReadModePipe } from './read-mode-pipe.pipe';
-import { AccountManagerComponent } from './account-manager/account-manager.component';
+//import { AccountManagerComponent } from './account-manager/account-manager.component';
 import { AccountDisplayerComponent } from './account-displayer/account-displayer.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
@@ -41,7 +41,6 @@ import { ProjectPageComponent } from './projects/project-page/project-page.compo
     FilePickerComponent,
     FileDropzoneComponent,
     ReadModePipe,
-    AccountManagerComponent,
     AccountDisplayerComponent,
     ProjectsViewerComponent,
     RegisterComponent,

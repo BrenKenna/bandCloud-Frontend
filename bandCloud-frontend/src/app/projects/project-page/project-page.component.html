@@ -2,10 +2,10 @@
 <mat-card>
     <mat-card-title>Recording & OGG Export</mat-card-title>
     <mat-card-content>
-        <button mat-raised-button (click)="manageWhtNoise_Record()" color="primary">White Noise-1</button>
-        <button mat-raised-button (click)="playRecording()" color="accent">Play Record</button>
-        <button mat-raised-button (click)="postRecording()" color="primary">Post Recording</button>
-        <button mat-raised-button (click)="playFetchedAudio()" color="warn">Fetch Audio</button>
+        <button class="workBenchBtn" mat-raised-button (click)="manageWhtNoise_Record()" color="primary">White Noise-1</button>
+        <button class="workBenchBtn" mat-raised-button (click)="playRecording()" color="accent">Play Record</button>
+        <button class="workBenchBtn" mat-raised-button (click)="postRecording()" color="primary">Post Recording</button>
+        <button class="workBenchBtn" mat-raised-button (click)="playFetchedAudio()" color="warn">Fetch Audio</button>
     </mat-card-content>
 </mat-card>
 <br>
@@ -15,8 +15,8 @@
 
 <mat-card>
     <mat-card-title>Record Audio</mat-card-title>
-    <button mat-raised-button (click)="recordMicoPhone()" color="primary">Record Audio</button>
-    <button mat-raised-button (click)="stopRecording()" color="warn">Stop Recording</button>
+    <button class="workBenchBtn" mat-raised-button (click)="recordMicoPhone()" color="primary">Record Audio</button>
+    <button class="workBenchBtn" mat-raised-button (click)="stopRecording()" color="warn">Stop Recording</button>
 
     <br><br>
     <mat-divider></mat-divider>
@@ -26,15 +26,15 @@
     <ul>
         <li *ngFor="let track of recordingTracks.tracks">
             <p>Track Name: {{ track.name }}</p>
-            <button mat-raised-button (click)="playTrackGeneral(recordingTracks, track.name)" color="accent">Play Track</button>
-            <button mat-raised-button (click)="dropFromTracks(recordingTracks, track.name)" color="warn">Drop Track</button>
-            <button mat-raised-button (click)="multiPlayGeneral(recordingTracks, track.name)" color="primary">Sync Play</button>
+            <button class="workBenchBtn" mat-raised-button (click)="playTrackGeneral(recordingTracks, track.name)" color="accent">Play Track</button>
+            <button class="workBenchBtn" mat-raised-button (click)="dropFromTracks(recordingTracks, track.name)" color="warn">Drop Track</button>
+            <button class="workBenchBtn" mat-raised-button (click)="multiPlayGeneral(recordingTracks, track.name)" color="primary">Sync Play</button>
         </li>
     </ul>
     <br>
-    <button mat-raised-button color="primary" (click)="mixGeneral(recordingTracks)">Mix recordings</button>
-    <button mat-raised-button color="warn" (click)="mix_PlayGeneral(recordingTracks)">Play mix</button>
-    <button mat-raised-button color="accent" (click)="postMix(recordingTracks)">Post mix</button>
+    <button class="workBenchBtn" mat-raised-button color="primary" (click)="mixGeneral(recordingTracks)">Mix recordings</button>
+    <button class="workBenchBtn" mat-raised-button color="warn" (click)="mix_PlayGeneral(recordingTracks)">Play mix</button>
+    <button class="workBenchBtn" mat-raised-button color="accent" (click)="postMix(recordingTracks)">Post mix</button>
 </mat-card>
 
 <br>
@@ -46,16 +46,16 @@
     <ul>
         <li *ngFor="let meta of mockMeta">
             <p>Track Name: {{ meta.name }}</p>
-            <button mat-raised-button (click)="fetchTrack(meta.name, meta.path)" color="primary">Fetch Track</button>
-            <button mat-raised-button (click)="playTrackGeneral(tracks, meta.name)" color="accent">Play Track</button>
-            <button mat-raised-button (click)="dropFromTracks(tracks, meta.name)" color="warn">Drop Track</button>
-            <button mat-raised-button (click)="multiPlayGeneral(tracks, meta.name)" color="primary">Sync Play</button>
+            <button class="workBenchBtn" mat-raised-button (click)="fetchTrack(meta.name, meta.path)" color="primary">Fetch Track</button>
+            <button class="workBenchBtn" mat-raised-button (click)="playTrackGeneral(tracks, meta.name)" color="accent">Play Track</button>
+            <button class="workBenchBtn" mat-raised-button (click)="dropFromTracks(tracks, meta.name)" color="warn">Drop Track</button>
+            <button class="workBenchBtn" mat-raised-button (click)="multiPlayGeneral(tracks, meta.name)" color="primary">Sync Play</button>
         </li>
     </ul>
     <br>
-    <button mat-raised-button (click)="sortTracks(tracks)" color="accent">Sort Tracks</button>
-    <button mat-raised-button (click)="mixGeneral(tracks)" color="warn">Mix Tracks</button>
-    <button mat-raised-button color="accent" (click)="postMix(tracks)">Post mix</button>
+    <button class="workBenchBtn" mat-raised-button (click)="sortTracks(tracks)" color="accent">Sort Tracks</button>
+    <button class="workBenchBtn" mat-raised-button (click)="mixGeneral(tracks)" color="warn">Mix Tracks</button>
+    <button class="workBenchBtn" mat-raised-button color="accent" (click)="postMix(tracks)">Post mix</button>
 </mat-card>
 
 <br>
@@ -68,7 +68,7 @@
     <audio controls="" *ngIf="mixedURL">
         <source [src]="sanitize(mixedURL)" type="audio/wav">
     </audio>
-    <button mat-raised-button color="accent" (click)="mix_PlayGeneral(recordingTracks)">Reload & Play mix</button>
+    <button class="workBenchBtn" mat-raised-button color="accent" (click)="mix_PlayGeneral(recordingTracks)">Reload & Play mix</button>
 </mat-card>
 
 <!--
@@ -79,9 +79,9 @@
         <br>
         <mat-divider></mat-divider>
         <div class="container" fxLayout="row" fxLayoutGap="20px">
-            <button mat-raised-button color="primary">Play</button>
-            <button mat-raised-button color="accent">Pause</button>
-            <button mat-raised-button color="warn">Stop</button>
+            <button class="workBenchBtn" mat-raised-button color="primary">Play</button>
+            <button class="workBenchBtn" mat-raised-button color="accent">Pause</button>
+            <button class="workBenchBtn" mat-raised-button color="warn">Stop</button>
         </div>
     </mat-card-content>
 </mat-card>
@@ -99,7 +99,7 @@
                 <li id="muliTrackList">
                     <div>
                         <span>Raw Audio Track: {{ rawTracks?.path }} </span>
-                        <button mat-raised-button color="accent">Add / Drop</button>
+                        <button class="workBenchBtn" mat-raised-button color="accent">Add / Drop</button>
                     </div>
                 </li>
             </ul>
